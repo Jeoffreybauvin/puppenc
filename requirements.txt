@@ -2,3 +2,4 @@ Flask
 Flask-restful
 Flask-SqlAlchemy
 mysqlclient
+pyyaml
