@@ -1,0 +1,7 @@
+Flask
+Flask-restful
+Flask-SqlAlchemy
+mysqlclient
+pyyaml
+unittest
+tempfile
