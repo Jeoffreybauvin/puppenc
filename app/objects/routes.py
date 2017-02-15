@@ -4,6 +4,9 @@ from app.puppenc import api, db, parser
 from app.objects.models import Environment, Class
 
 class Objects(Resource):
+    def __init__(self, type):
+        self.type = type
+
     def get(self, page=1, id=None):
         """
         @api {get} /environments Get all Environments
@@ -49,7 +52,7 @@ class Objects(Resource):
                 'update_date': environment.update_date,
                 'delete_date': environment.delete_date,
             }
-        return jsonify(res)
+        return self.type
 
 
     def post(self, id=None):
@@ -92,8 +95,9 @@ class Objects(Resource):
 
 
 api.add_resource(
-    Objects,
-    '/environments',
-    '/environments/<int:id>',
-    '/classes'
+    Objects, '/environments', '/environments/<int:id>', endpoint='env', resource_class_kwargs={ 'type': 'env' }
+)
+
+api.add_resource(
+    Objects, '/classes', '/classes/<int:id>', endpoint='class', resource_class_kwargs={ 'type': 'class' }
 )
