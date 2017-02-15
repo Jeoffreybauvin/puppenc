@@ -26,4 +26,4 @@ class Class(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Environment %r>' % (self.name)
+        return '<Class %r>' % (self.name)
