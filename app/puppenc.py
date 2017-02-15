@@ -18,6 +18,7 @@ db = SQLAlchemy(app)
 parser = reqparse.RequestParser()
 parser.add_argument('as_yaml', type=int, default=0)
 
+
 from app.objects.routes import Objects
 
 class Index(Resource):
