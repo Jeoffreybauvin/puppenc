@@ -4,6 +4,6 @@ import readline
 from pprint import pprint
 
 from flask import *
-from app.puppenc import app, db
+from app import puppenc
 
 os.environ['PYTHONINSPECT'] = 'True'

@@ -3,3 +3,5 @@ Flask-restful
 Flask-SqlAlchemy
 mysqlclient
 pyyaml
+flask-marshmallow
+marshmallow-sqlalchemy

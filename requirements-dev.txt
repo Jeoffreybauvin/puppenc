@@ -3,5 +3,5 @@ Flask-restful
 Flask-SqlAlchemy
 mysqlclient
 pyyaml
-unittest
-tempfile
+marshmallow-sqlalchemy
+flask_admin
