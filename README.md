@@ -3,11 +3,37 @@ A simple external node classifier (ENC) for Puppet
 
 # Dev environment
 
+docker-compose.yml
+
 ~~~
-docker pull mysql:5.6
-docker run --name mysql-puppenc -e MYSQL_ROOT_PASSWORD=puppenc -e MYSQL_DATABASE=puppenc -d mysql:5.6
+version: '2'
+services:
+  puppenc-api:
+    image: puppenc/api:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      -  /root/puppenc/api:/puppenc
+    links:
+      - puppenc-mysql
+    entrypoint:
+      - python
+      - run.py
+  puppenc-mysql:
+    image: mysql:5.6
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'puppenc'
+      MYSQL_DATABASE: 'puppenc'
 ~~~
 
+Après :
+
+~~~
+docker-compose up
+docker-compose exec puppenc-api python shell.py
+~~~
 
 ~~~
 $ sudo apt-get install libmysqlclient-dev
