@@ -5,7 +5,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 class Node(db.Model):
     __tablename__ = 'nodes'
     id             = db.Column(db.Integer, primary_key=True)
-    name           = db.Column(db.String(255))
+    name           = db.Column(db.String(255), unique=True)
     insert_date    = db.Column(db.DateTime, default=db.func.current_timestamp())
     update_date    = db.Column(db.DateTime, default=None)
     delete_date    = db.Column(db.DateTime, default=None)
