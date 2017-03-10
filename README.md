@@ -4,6 +4,12 @@ A simple external node classifier (ENC) for Puppet
 # Dev environment
 
 ~~~
+docker pull mysql:5.6
+docker run --name mysql-puppenc -e MYSQL_ROOT_PASSWORD=puppenc -e MYSQL_DATABASE=puppenc -d mysql:5.6
+~~~
+
+
+~~~
 $ sudo apt-get install libmysqlclient-dev
 $ virtualenv -p python3 venv
 $ . venv/bin/activate
