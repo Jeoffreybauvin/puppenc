@@ -37,7 +37,7 @@ class Nodes(Resource):
         @apiSuccess {Datetime}  delete_date     The node's deleted date
         """
         if not id:
-            obj = Node.query.paginate(page, 10).items
+            obj = Node.query.paginate(page, 20).items
             return self.nodes_schema.jsonify(obj)
         else:
             obj = Node.query.filter_by(id=id).first()
@@ -60,7 +60,13 @@ class Nodes(Resource):
             http://127.0.0.1:5000/api/v1/nodes
         """
         content = request.get_json(silent=True)
-        name           = content['name']
+        name    = content['name']
+
+        # Check if the node already exists
+        exists = db.session.query(db.exists().where(Node.name == name)).scalar()
+        if exists:
+            return { "success": False, "message": "Node already exists" }, 200
+
         if not 'hostgroup_id' in content:
             hostgroup_id = None
         else:
@@ -80,13 +86,41 @@ class Nodes(Resource):
         }})
 
     def put(self, id):
+        """
+        @api {put} /nodes/<id> Edit a node
+        @apiVersion 1.0.0
+        @apiName put_node
+        @apiGroup Nodes
+        @apiParam {Number}    id              The node's id.
+        @apiParam {String}    name            The node's name.
+        @apiParam {Number}    environment_id  The node's environment_id.
+        @apiParam {Number}    hostgroup_id    The node's hostgroup_id.
+        @apiSuccess {Boolean}   success         Success (True if ok).
+        @apiSuccess {String}    message         A success or error message.
+        @apiExample {curl} Example usage :
+            curl -X PUT -H "Content-Type: application/json" \
+            -d '{ "name": "my_new_server" }' \
+            http://127.0.0.1:5000/api/v1/nodes/1
+        """
         node = Node.query.filter_by(id=id).first()
         if not node:
             return { "success": False, "message": "Node not found" }, 304
         else:
             Node.query.filter_by(id=id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
+
+            content = request.get_json(silent=True)
+            if 'name' in content:
+                Node.query.filter_by(id=id).update({ "name": content['name'] }, synchronize_session=False)
+
+            if 'environment_id' in content:
+                Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
+
+            if 'hostgroup_id' in content:
+                Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
+
+
             db.session.commit()
-            return { "success": True }, 200
+            return { "success": True, "message": "Node successfully modified" }, 200
 
 
     def delete(self, id):
