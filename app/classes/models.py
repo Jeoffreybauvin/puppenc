@@ -1,4 +1,5 @@
 from app.puppenc import db
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 
 class Class(db.Model):
     __tablename__ = 'classes'

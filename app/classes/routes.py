@@ -54,9 +54,22 @@ class Classes(Resource):
         @apiGroup Classes
         @apiParam   {String}    name            The class's name.
         @apiSuccess {Number}    id              The class's id.
+        @apiExample {curl} Example usage :
+            curl -X POST -H "Content-Type: application/json" \
+            -d '{ "name": "role::my_class" }' \
+            http://127.0.0.1:5000/api/v1/classes
         """
         content = request.get_json(silent=True)
-        name = content['name']
+        if not 'name' in content:
+            return { "success": False, "message": "No name given for this class" }, 500
+        else:
+            name = content['name']
+
+        # Check if the class already exists
+        exists = db.session.query(db.exists().where(Class.name == name)).scalar()
+        if exists:
+            return { "success": False, "message": "Class already exists" }, 200
+
         obj = Class(name)
         db.session.add(obj)
         db.session.commit()
@@ -69,11 +82,13 @@ class Classes(Resource):
         """
         @api {delete} /classes/<id> Delete a single class
         @apiVersion 1.0.0
-        @apiName rm_hostgorup
+        @apiName rm_class
         @apiGroup Classes
         @apiParam   {Number}    id              The class's id.
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
+        @apiExample {curl} Example usage :
+            curl -X DELETE http://127.0.0.1:5000/api/v1/classes/<id>
         """
         class_obj = Class.query.filter_by(id=id).first()
         if not environment:

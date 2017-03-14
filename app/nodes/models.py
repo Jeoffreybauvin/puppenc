@@ -1,7 +1,6 @@
 from app.puppenc import db
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 
-
 class Node(db.Model):
     __tablename__ = 'nodes'
     id             = db.Column(db.Integer, primary_key=True)

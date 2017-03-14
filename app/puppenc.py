@@ -1,4 +1,5 @@
-import os, sys, yaml
+import os, sys, yaml, logging
+from logging.handlers import RotatingFileHandler
 from flask import Flask, Blueprint, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
@@ -37,6 +38,14 @@ def output_yaml(data, code, headers=None):
     resp = make_response(yaml.dump(data, allow_unicode=True, default_flow_style=False, indent=5), code)
     resp.headers.extend(headers)
     return resp
+
+# def log_request(func):
+#     def wrapper(*args, **kwargs):
+#         app.logger.info('prout')
+#     return wrapper
+#
+# class ResourceC(Resource):
+#     method_decorators = [log_request]
 
 from app.environments.routes import Environments
 from app.hostgroups.routes import Hostgroups
