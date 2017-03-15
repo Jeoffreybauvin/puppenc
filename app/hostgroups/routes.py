@@ -83,6 +83,3 @@ class Hostgroups(Resource):
             db.session.delete(environment)
             db.session.commit()
             return { "success": True }, 200
-
-# Let's expose something :)
-api.add_resource(Hostgroups, '/hostgroups', '/hostgroups/<int:id>')

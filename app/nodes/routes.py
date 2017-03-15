@@ -2,6 +2,7 @@ from flask_restful import Resource
 from flask import jsonify, request
 
 from app.puppenc import api, db
+from app.decorators import *
 
 from app.nodes.models import Node
 from app.nodes.schema import NodeSchema
@@ -46,6 +47,7 @@ class Nodes(Resource):
             return self.node_schema.jsonify(obj)
 
 
+    @body_is_valid
     def post(self, id=None):
         """
         @api {post} /nodes Add a new node
@@ -144,6 +146,3 @@ class Nodes(Resource):
             Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
             db.session.commit()
             return { "success": True }, 200
-
-# Let's expose something :)
-api.add_resource(Nodes, '/nodes', '/nodes/<int:id>')

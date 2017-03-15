@@ -1,16 +1,18 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db
+from app.puppenc import api, db, app, PuppencResource
+from app.decorators import *
 
 from app.environments.models import Environment
 from app.environments.schema import EnvironmentSchema
 
-class Environments(Resource):
+class Environments(PuppencResource):
     def __init__(self):
         self.environment_schema = EnvironmentSchema()
         self.environments_schema = EnvironmentSchema(many=True)
 
+    @get_item(Environment)
     def get(self, page=1, id=None):
         """
         @api {get} /environments Get all environments
@@ -37,15 +39,13 @@ class Environments(Resource):
         @apiSuccess {Datetime}  delete_date     The environment's deleted date
         """
         if not id:
-            obj = Environment.query.paginate(page, 10).items
-            return self.environments_schema.jsonify(obj)
+            return self.environments_schema.jsonify(g.obj_info)
         else:
-            obj = Environment.query.filter_by(id=id).first()
-            if not obj:
-                return { "success": False, "message": "Environment not found" }, 404
-            return self.environment_schema.jsonify(obj)
+            return self.environment_schema.jsonify(g.obj_info)
 
-
+    @is_unique_item(Environment)
+    @body_is_valid
+    @post_item(Environment)
     def post(self):
         """
         @api {post} /environments Add a new environment
@@ -55,16 +55,10 @@ class Environments(Resource):
         @apiParam   {String}    name            The environment's name.
         @apiSuccess {Number}    id              The environment's id.
         """
-        content = request.get_json(silent=True)
-        name = content['name']
-        obj = Environment(name)
-        db.session.add(obj)
-        db.session.commit()
+        pass
 
-        return jsonify({obj.id: {
-            'name': obj.name,
-        }})
-
+    @get_item(Environment)
+    @delete_item(Environment)
     def delete(self, id):
         """
         @api {delete} /environments/<id> Delete a single environment
@@ -75,13 +69,4 @@ class Environments(Resource):
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
         """
-        environment_obj = Environment.query.filter_by(id=id).first()
-        if not environment:
-            return { "success": False, "message": "Environment not found" }, 304
-        else:
-            db.session.delete(environment_obj)
-            db.session.commit()
-            return { "success": True }, 200
-
-# Let's expose something :)
-api.add_resource(Environments, '/environments', '/environments/<int:id>')
+        pass
