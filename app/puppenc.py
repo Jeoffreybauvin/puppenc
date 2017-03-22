@@ -68,7 +68,7 @@ api.add_resource(Enc, '/enc/<string:node_name>')
 
 class Index(Resource):
     def get(self):
-        return { "name": "Puppenc", "version": app.config['PREFIX']}, 200
+        return { "name": "Puppenc", "version": app.config['VERSION']}, 200
 
 api.add_resource(Index, '/', '/index')
 app.register_blueprint(api_bp)
