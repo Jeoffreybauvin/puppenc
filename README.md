@@ -2,7 +2,7 @@
 
 A simple external node classifier (ENC) for Puppet
 
-## Specs
+### Specs
 
 | Object | Methods | Description |
 | --- | --- | --- |
