@@ -24,6 +24,8 @@ class Classes(PuppencResource):
         @apiSuccess {Datetime}  insert_date     The class's inserted date
         @apiSuccess {Datetime}  update_date     The class's updated date
         @apiSuccess {Datetime}  delete_date     The class's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET http://127.0.0.1:5000/api/v1/classes
         """
 
         """
@@ -37,14 +39,16 @@ class Classes(PuppencResource):
         @apiSuccess {Datetime}  insert_date     The class's inserted date
         @apiSuccess {Datetime}  update_date     The class's updated date
         @apiSuccess {Datetime}  delete_date     The class's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET http://127.0.0.1:5000/api/v1/classes/<id>
         """
         if not id:
             return self.classes_schema.jsonify(g.obj_info)
         else:
             return self.class_schema.jsonify(g.obj_info)
 
-    @is_unique_item(Class)
     @body_is_valid
+    @is_unique_item(Class)
     @post_item(Class)
     def post(self, id=None):
         """
@@ -58,6 +62,25 @@ class Classes(PuppencResource):
             curl -X POST -H "Content-Type: application/json" \
             -d '{ "name": "role::my_class" }' \
             http://127.0.0.1:5000/api/v1/classes
+        """
+        pass
+
+    @body_is_valid
+    @is_unique_item(Class)
+    @get_item(Class)
+    @edit_item(Class)
+    def put(self, id=None):
+        """
+        @api {put} /classes/<id> Edit an existing class
+        @apiVersion 1.0.0
+        @apiName edit_class
+        @apiGroup Classes
+        @apiSuccess {Number}    success         True if success
+        @apiSuccess {Number}    message         A information message
+        @apiExample {curl} Example usage :
+            curl -X PUT -H "Content-Type: application/json" \
+            -d '{ "name": "role::my_class" }' \
+            http://127.0.0.1:5000/api/v1/classes/<id>
         """
         pass
 

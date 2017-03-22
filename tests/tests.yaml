@@ -1,7 +1,6 @@
 ---
 - config:
     - testset: "Puppenc tests"
-    - variable_binds: {env_name: 'my_test_environment'}
 
 - test:
     - group: "Start"
@@ -24,7 +23,7 @@
     - name: "Create an environment"
     - url: "/api/v1/environments"
     - method: "POST"
-    - body: '{"name": "$env_name"}'
+    - body: '{"name": "my_test_environment"}'
     - headers: {'Content-Type': 'application/json'}
     - expected_status: [200]
 
@@ -34,7 +33,24 @@
     - url: "/api/v1/environments/1"
     - expected_status: [200]
     - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "$env_name"}
+        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_test_environment"}
+
+- test:
+    - group: "Environments"
+    - name: "Edit an environment"
+    - url: "/api/v1/environments/1"
+    - method: "PUT"
+    - body: '{"name": "my_new_env"}'
+    - headers: {'Content-Type': 'application/json'}
+    - expected_status: [200]
+
+- test:
+    - group: "Environments"
+    - name: "Check my env"
+    - url: "/api/v1/environments/1"
+    - expected_status: [200]
+    - validators:
+        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_env"}
 
 - test:
     - group: "Environments"
@@ -51,4 +67,4 @@
     - url: "/api/v1/environments/1"
     - expected_status: [404]
     - validators:
-        - compare: {jsonpath_mini: "success", comparator: "eq", expected: false} 
+        - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}

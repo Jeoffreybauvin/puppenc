@@ -43,8 +43,8 @@ class Environments(PuppencResource):
         else:
             return self.environment_schema.jsonify(g.obj_info)
 
-    @is_unique_item(Environment)
     @body_is_valid
+    @is_unique_item(Environment)
     @post_item(Environment)
     def post(self):
         """
@@ -54,6 +54,26 @@ class Environments(PuppencResource):
         @apiGroup Environments
         @apiParam   {String}    name            The environment's name.
         @apiSuccess {Number}    id              The environment's id.
+        """
+        pass
+
+    @body_is_valid
+    @is_unique_item(Environment)
+    @get_item(Environment)
+    @edit_item(Environment)
+    def put(self, id=None):
+        """
+        @api {put} /environments/<id> Edit an existing environment
+        @apiVersion 1.0.0
+        @apiName edit_environment
+        @apiGroup Environments
+        @apiParam   {String}    name            The environment's name.
+        @apiSuccess {Number}    success         True if success
+        @apiSuccess {Number}    message         A information message
+        @apiExample {curl} Example usage :
+            curl -X PUT -H "Content-Type: application/json" \
+            -d '{ "name": "my_new_environment" }' \
+            http://127.0.0.1:5000/api/v1/environments/<id>
         """
         pass
 

@@ -70,7 +70,22 @@ def post_item(Type):
         return func_wrapper
     return wrapper
 
+def edit_item(Type):
+    def wrapper(f):
+        @wraps(f)
+        def func_wrapper(*args, **kwargs):
+            obj_id = kwargs.get('id')
 
+            Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
+            Type.query.filter_by(id=obj_id).update({ "name": g.obj_name }, synchronize_session=False)
+
+            db.session.commit()
+            app.logger.info(u"Edit Item %s %s" % (Type, g.obj_name))
+            return { "success": True, "message": "successfully modified" }, 200
+
+            return f(*args, **kwargs)
+        return func_wrapper
+    return wrapper
 
 def delete_item(Type):
     def wrapper(f):
