@@ -5,6 +5,7 @@ DEBUG = True
 PROFILE = True
 
 PREFIX = '/api/v1'
+VERSION = '0.1'
 
 DATABASE = 'puppenc'
 SQLALCHEMY_DATABASE_CONN = 'mysql://root:puppenc@puppenc-mysql'
