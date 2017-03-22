@@ -2,6 +2,15 @@
 
 A simple external node classifier (ENC) for Puppet
 
+## Specs
+
+| Object | Methods | Description |
+| --- | --- | --- |
+| Classes | `GET`, `POST`, `DELETE`  | Manage Puppet's classes
+| Environments | `GET`, `POST`, `DELETE`  | Manage Puppet's environments
+| Hostgroups | `GET`, `POST`, `DELETE`  | Manage Puppet's hostgroups
+| Nodes | `GET`, `POST`, `PUT`, `DELETE`  | Manage Puppet's nodes
+| ENC | `GET` | Manage ENC resources
 
 ### Dev environment
 
@@ -15,6 +24,7 @@ services:
     restart: always
     ports:
       - "5000:5000"
+      - "5001:5001"
     volumes:
       -  /root/puppenc/api:/puppenc
     links:
@@ -62,6 +72,21 @@ Test Group Environments SUCCEEDED: : 5/5 Tests Passed!
 Test Group Start SUCCEEDED: : 1/1 Tests Passed!
 ```
 
+### I need a GUI
+
+You should not need a GUI. But, if you want to, you can use (Flask_Admin)[https://flask-admin.readthedocs.io/en/latest/].
+
+**In my virtualenv :**
+
+```
+$ docker-compose exec puppenc-api python admin.py
+ * Running on http://0.0.0.0:5001/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 730-803-037
+```
+
+And browse to (http://127.0.0.1:5001/admin/)[http://127.0.0.1:5001/admin/]
 
 ## Some links related to Puppet's ENC
 
