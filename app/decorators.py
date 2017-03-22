@@ -46,7 +46,7 @@ def get_item(Type):
                 obj = Type.query.paginate(1, 1000).items
 
             if obj is None:
-                return { "success": False, "message": u"%s not found" % type  }, 500
+                return { "success": False, "message": u"%s not found" % type  }, 404
 
             g.obj_info = obj
             return f(*args, **kwargs)
