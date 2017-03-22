@@ -1,7 +1,8 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db
+from app.puppenc import api, db, app, PuppencResource
+from app.decorators import *
 
 from app.nodes.models import Node
 from app.nodes.schema import NodeSchema
@@ -11,6 +12,7 @@ class Nodes(Resource):
         self.node_schema = NodeSchema()
         self.nodes_schema = NodeSchema(many=True)
 
+    @get_item(Node)
     def get(self, page=1, id=None):
         """
         @api {get} /nodes Get all nodes
@@ -37,15 +39,14 @@ class Nodes(Resource):
         @apiSuccess {Datetime}  delete_date     The node's deleted date
         """
         if not id:
-            obj = Node.query.paginate(page, 20).items
-            return self.nodes_schema.jsonify(obj)
+            return self.nodes_schema.jsonify(g.obj_info)
         else:
-            obj = Node.query.filter_by(id=id).first()
-            if not obj:
-                return { "success": False, "message": "Node not found" }, 404
-            return self.node_schema.jsonify(obj)
+            return self.node_schema.jsonify(g.obj_info)
 
 
+    @is_unique_item(Node)
+    @body_is_valid
+    @post_item(Node)
     def post(self, id=None):
         """
         @api {post} /nodes Add a new node
@@ -59,31 +60,7 @@ class Nodes(Resource):
             -d '{ "name": "my_server", "environment_id":1 }' \
             http://127.0.0.1:5000/api/v1/nodes
         """
-        content = request.get_json(silent=True)
-        name    = content['name']
-
-        # Check if the node already exists
-        exists = db.session.query(db.exists().where(Node.name == name)).scalar()
-        if exists:
-            return { "success": False, "message": "Node already exists" }, 200
-
-        if not 'hostgroup_id' in content:
-            hostgroup_id = None
-        else:
-            hostgroup_id = content['hostgroup_id']
-
-        if not 'environment_id' in content:
-            return { "success": False, "message": "No environment_id given" }, 500
-        else:
-            environment_id = content['environment_id']
-
-        obj = Node(name, environment_id, hostgroup_id)
-        db.session.add(obj)
-        db.session.commit()
-
-        return jsonify({obj.id: {
-            'name': obj.name,
-        }})
+        pass
 
     def put(self, id):
         """
@@ -122,7 +99,7 @@ class Nodes(Resource):
             db.session.commit()
             return { "success": True, "message": "Node successfully modified" }, 200
 
-
+    @get_item(Node)
     def delete(self, id):
         """
         @api {delete} /nodes/<id> Delete a single node
@@ -137,13 +114,6 @@ class Nodes(Resource):
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/<id>
         """
-        node = Node.query.filter_by(id=id).first()
-        if not node:
-            return { "success": False, "message": "Node not found" }, 304
-        else:
-            Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
-            db.session.commit()
-            return { "success": True }, 200
-
-# Let's expose something :)
-api.add_resource(Nodes, '/nodes', '/nodes/<int:id>')
+        Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
+        db.session.commit()
+        return { "success": True }, 200

@@ -78,6 +78,3 @@ class Enc(Resource):
             if not res:
                 return { "success": False, "message": "Node not found" }, 404
             return output_yaml(res, 200)
-
-# Let's expose something :)
-api.add_resource(Enc, '/enc/<string:node_name>')

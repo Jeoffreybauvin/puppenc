@@ -1,16 +1,18 @@
 from flask_restful import Resource
-from flask import jsonify, request
+from flask import jsonify, request, g
 
-from app.puppenc import api, db
+from app.puppenc import api, db, app, PuppencResource
+from app.decorators import *
 
 from app.classes.models import Class
 from app.classes.schema import ClassSchema
 
-class Classes(Resource):
+class Classes(PuppencResource):
     def __init__(self):
         self.class_schema = ClassSchema()
         self.classes_schema = ClassSchema(many=True)
 
+    @get_item(Class)
     def get(self, page=1, id=None):
         """
         @api {get} /classes Get all classes
@@ -37,15 +39,13 @@ class Classes(Resource):
         @apiSuccess {Datetime}  delete_date     The class's deleted date
         """
         if not id:
-            obj = Class.query.paginate(page, 10).items
-            return self.classes_schema.jsonify(obj)
+            return self.classes_schema.jsonify(g.obj_info)
         else:
-            obj = Class.query.filter_by(id=id).first()
-            if not obj:
-                return { "success": False, "message": "Class not found" }, 404
-            return self.class_schema.jsonify(obj)
+            return self.class_schema.jsonify(g.obj_info)
 
-
+    @is_unique_item(Class)
+    @body_is_valid
+    @post_item(Class)
     def post(self, id=None):
         """
         @api {post} /classes Add a new class
@@ -54,34 +54,25 @@ class Classes(Resource):
         @apiGroup Classes
         @apiParam   {String}    name            The class's name.
         @apiSuccess {Number}    id              The class's id.
+        @apiExample {curl} Example usage :
+            curl -X POST -H "Content-Type: application/json" \
+            -d '{ "name": "role::my_class" }' \
+            http://127.0.0.1:5000/api/v1/classes
         """
-        content = request.get_json(silent=True)
-        name = content['name']
-        obj = Class(name)
-        db.session.add(obj)
-        db.session.commit()
+        pass
 
-        return jsonify({obj.id: {
-            'name': obj.name,
-        }})
-
+    @get_item(Class)
+    @delete_item(Class)
     def delete(self, id):
         """
         @api {delete} /classes/<id> Delete a single class
         @apiVersion 1.0.0
-        @apiName rm_hostgorup
+        @apiName rm_class
         @apiGroup Classes
         @apiParam   {Number}    id              The class's id.
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
+        @apiExample {curl} Example usage :
+            curl -X DELETE http://127.0.0.1:5000/api/v1/classes/<id>
         """
-        class_obj = Class.query.filter_by(id=id).first()
-        if not environment:
-            return { "success": False, "message": "Class not found" }, 304
-        else:
-            db.session.delete(class_obj)
-            db.session.commit()
-            return { "success": True }, 200
-
-# Let's expose something :)
-api.add_resource(Classes, '/classes', '/classes/<int:id>')
+        pass
