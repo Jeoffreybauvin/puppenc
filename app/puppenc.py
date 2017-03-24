@@ -62,7 +62,6 @@ api.add_resource(Environments, '/environments', '/environments/<int:id>')
 api.add_resource(Classes, '/classes', '/classes/<int:id>')
 api.add_resource(Enc, '/enc/<string:node_name>')
 
-
 class Index(Resource):
     def get(self):
         return { "name": "Puppenc", "version": app.config['VERSION']}, 200
