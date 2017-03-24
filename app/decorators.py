@@ -40,10 +40,12 @@ def get_item(Type):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
             obj_id = kwargs.get('id')
+            nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
+            cur_page = int(request.args.get('page', 1))
             if obj_id:
                 obj = Type.query.filter_by(id=obj_id).first()
             else:
-                obj = Type.query.paginate(1, 1000).items
+                obj = Type.query.paginate(cur_page, nb_limit).items
 
             if obj is None:
                 return { "success": False, "message": u"%s not found" % type  }, 404
@@ -52,7 +54,6 @@ def get_item(Type):
             return f(*args, **kwargs)
         return func_wrapper
     return wrapper
-
 
 def post_item(Type):
     def wrapper(f):
