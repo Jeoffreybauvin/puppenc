@@ -2,6 +2,8 @@ from flask import Flask, Blueprint, make_response, request, abort, g, jsonify
 from functools import wraps
 from app.puppenc import api, db, app, PuppencResource
 
+# decorator
+# check if body is valid (valid json)
 def body_is_valid(func):
     def wrapper(*args, **kwargs):
         body = request.get_data()
@@ -16,6 +18,8 @@ def body_is_valid(func):
 
     return wrapper
 
+# decorator
+# check if my item is unique
 def is_unique_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -34,7 +38,8 @@ def is_unique_item(Type):
         return func_wrapper
     return wrapper
 
-
+# decorator
+# retrieve my item
 def get_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -55,6 +60,8 @@ def get_item(Type):
         return func_wrapper
     return wrapper
 
+# decorator
+# post my item
 def post_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -71,6 +78,8 @@ def post_item(Type):
         return func_wrapper
     return wrapper
 
+# decorator
+# edit my item
 def edit_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -88,6 +97,8 @@ def edit_item(Type):
         return func_wrapper
     return wrapper
 
+# decorator
+# delete my item
 def delete_item(Type):
     def wrapper(f):
         @wraps(f)
