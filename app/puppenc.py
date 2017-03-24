@@ -32,7 +32,6 @@ def destroy_db():
     engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
     engine.execute('DROP DATABASE ' + app.config['DATABASE']) #create db - throw an error if already exists
 
-
 @api.representation('text/plain')
 def output_yaml(data, code, headers=None):
     headers = {'Content-Type': 'text/plain'}
@@ -43,8 +42,6 @@ def output_yaml(data, code, headers=None):
 
 def log_request(func):
     def wrapper(*args, **kwargs):
-        # For now, no log
-        # app.logger.info('prout')
         return func(*args, **kwargs)
     return wrapper
 
