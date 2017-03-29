@@ -13,7 +13,22 @@ app = Flask(WHOAMI)
 
 api_bp = Blueprint('api', WHOAMI)
 
+app.config.update(dict(
+    PROFILE = False,
+    DEBUG = False,
+    PREFIX = '/api/v1',
+    VERSION = '0.1',
+    OBJECTS_PER_PAGE = 10,
+    SQLALCHEMY_TRACK_MODIFICATIONS = False,
+    DB_NAME = 'puppenc',
+    DB_HOST = 'puppenc-mysql',
+    DB_USER = 'root',
+    DB_PASSWORD = 'puppenc',
+))
 app.config.from_object('config')
+
+app.config.update(dict(SQLALCHEMY_DATABASE_CONN = 'mysql://' + app.config['DB_USER'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_HOST']))
+app.config.update(dict(SQLALCHEMY_DATABASE_URI = app.config['SQLALCHEMY_DATABASE_CONN'] + '/' + app.config['DB_NAME']))
 
 api = Api(api_bp, prefix=app.config['PREFIX'])
 db = SQLAlchemy(app)
