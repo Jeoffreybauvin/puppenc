@@ -1,2 +1,3 @@
-DEBUG = True
-PROFILE = True
+# Override some variables here
+# DEBUG = True
+# PROFILE = True
