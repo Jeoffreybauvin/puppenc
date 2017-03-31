@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, request, g
 
-from app.puppenc import api, db, app, PuppencResource
+from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
 
 from app.classes.models import Class
@@ -12,6 +12,7 @@ class Classes(PuppencResource):
         self.class_schema = ClassSchema()
         self.classes_schema = ClassSchema(many=True)
 
+    @auth.login_required
     @get_item(Class)
     def get(self, page=1, id=None):
         """
@@ -47,6 +48,7 @@ class Classes(PuppencResource):
         else:
             return self.class_schema.jsonify(g.obj_info)
 
+    @auth.login_required
     @body_is_valid
     @is_unique_item(Class)
     @post_item(Class)
@@ -65,6 +67,7 @@ class Classes(PuppencResource):
         """
         pass
 
+    @auth.login_required
     @body_is_valid
     @is_unique_item(Class)
     @get_item(Class)
@@ -84,6 +87,7 @@ class Classes(PuppencResource):
         """
         pass
 
+    @auth.login_required
     @get_item(Class)
     @delete_item(Class)
     def delete(self, id):

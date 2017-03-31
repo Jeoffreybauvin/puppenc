@@ -1,0 +1,8 @@
+# Override some variables here
+DEBUG = True
+PROFILE = True
+
+# For auth
+SECRET_KEY = "my_secret_key"
+# Token validity duration
+AUTH_DURATION = 600

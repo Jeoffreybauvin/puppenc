@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db, output_yaml
+from app.puppenc import api, db, output_yaml, auth
 
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
@@ -9,6 +9,7 @@ from app.environments.models import Environment
 from app.classes.models import Class
 
 class Enc(Resource):
+    @auth.login_required
     def get(self, page=1, node_name=None):
         """
         @api {get} /enc/<node-name> Get node informations (ENC)
