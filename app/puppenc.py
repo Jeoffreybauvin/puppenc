@@ -13,7 +13,22 @@ app = Flask(WHOAMI)
 
 api_bp = Blueprint('api', WHOAMI)
 
+app.config.update(dict(
+    PROFILE = False,
+    DEBUG = False,
+    PREFIX = '/api/v1',
+    VERSION = '0.1',
+    OBJECTS_PER_PAGE = 10,
+    SQLALCHEMY_TRACK_MODIFICATIONS = False,
+    DB_NAME = 'puppenc',
+    DB_HOST = 'puppenc-mysql',
+    DB_USER = 'root',
+    DB_PASSWORD = 'puppenc',
+))
 app.config.from_object('config')
+
+app.config.update(dict(SQLALCHEMY_DATABASE_CONN = 'mysql://' + app.config['DB_USER'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_HOST']))
+app.config.update(dict(SQLALCHEMY_DATABASE_URI = app.config['SQLALCHEMY_DATABASE_CONN'] + '/' + app.config['DB_NAME']))
 
 api = Api(api_bp, prefix=app.config['PREFIX'])
 db = SQLAlchemy(app)
@@ -32,7 +47,6 @@ def destroy_db():
     engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
     engine.execute('DROP DATABASE ' + app.config['DATABASE']) #create db - throw an error if already exists
 
-
 @api.representation('text/plain')
 def output_yaml(data, code, headers=None):
     headers = {'Content-Type': 'text/plain'}
@@ -43,8 +57,6 @@ def output_yaml(data, code, headers=None):
 
 def log_request(func):
     def wrapper(*args, **kwargs):
-        # For now, no log
-        # app.logger.info('prout')
         return func(*args, **kwargs)
     return wrapper
 
@@ -65,10 +77,9 @@ api.add_resource(Environments, '/environments', '/environments/<int:id>')
 api.add_resource(Classes, '/classes', '/classes/<int:id>')
 api.add_resource(Enc, '/enc/<string:node_name>')
 
-
 class Index(Resource):
     def get(self):
-        return { "name": "Puppenc", "version": app.config['PREFIX']}, 200
+        return { "name": "Puppenc", "version": app.config['VERSION']}, 200
 
 api.add_resource(Index, '/', '/index')
 app.register_blueprint(api_bp)

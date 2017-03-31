@@ -2,6 +2,8 @@ from flask import Flask, Blueprint, make_response, request, abort, g, jsonify
 from functools import wraps
 from app.puppenc import api, db, app, PuppencResource
 
+# decorator
+# check if body is valid (valid json)
 def body_is_valid(func):
     def wrapper(*args, **kwargs):
         body = request.get_data()
@@ -16,6 +18,8 @@ def body_is_valid(func):
 
     return wrapper
 
+# decorator
+# check if my item is unique
 def is_unique_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -34,16 +38,19 @@ def is_unique_item(Type):
         return func_wrapper
     return wrapper
 
-
+# decorator
+# retrieve my item
 def get_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
             obj_id = kwargs.get('id')
+            nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
+            cur_page = int(request.args.get('page', 1))
             if obj_id:
                 obj = Type.query.filter_by(id=obj_id).first()
             else:
-                obj = Type.query.paginate(1, 1000).items
+                obj = Type.query.paginate(cur_page, nb_limit).items
 
             if obj is None:
                 return { "success": False, "message": u"%s not found" % type  }, 404
@@ -53,7 +60,8 @@ def get_item(Type):
         return func_wrapper
     return wrapper
 
-
+# decorator
+# post my item
 def post_item(Type):
     def wrapper(f):
         @wraps(f)
@@ -70,8 +78,27 @@ def post_item(Type):
         return func_wrapper
     return wrapper
 
+# decorator
+# edit my item
+def edit_item(Type):
+    def wrapper(f):
+        @wraps(f)
+        def func_wrapper(*args, **kwargs):
+            obj_id = kwargs.get('id')
 
+            Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
+            Type.query.filter_by(id=obj_id).update({ "name": g.obj_name }, synchronize_session=False)
 
+            db.session.commit()
+            app.logger.info(u"Edit Item %s %s" % (Type, g.obj_name))
+            return { "success": True, "message": "successfully modified" }, 200
+
+            return f(*args, **kwargs)
+        return func_wrapper
+    return wrapper
+
+# decorator
+# delete my item
 def delete_item(Type):
     def wrapper(f):
         @wraps(f)
