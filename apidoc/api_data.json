@@ -453,6 +453,11 @@
     "url": "/environments/<id>",
     "title": "Get a single environment",
     "version": "1.0.0",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "name": "get_environment",
     "group": "Environments",
     "parameter": {

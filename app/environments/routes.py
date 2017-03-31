@@ -31,6 +31,7 @@ class Environments(PuppencResource):
         """
         @api {get} /environments/<id> Get a single environment
         @apiVersion 1.0.0
+        @apiPermission user
         @apiName get_environment
         @apiGroup Environments
         @apiParam   {Number}    id              The environment's id.
