@@ -290,6 +290,11 @@ define({ "api": [
     "version": "1.0.0",
     "name": "get_enc",
     "group": "ENC",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -353,6 +358,11 @@ define({ "api": [
     "title": "Add a new environment",
     "version": "1.0.0",
     "name": "add_environment",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Environments",
     "parameter": {
       "fields": {
@@ -389,6 +399,11 @@ define({ "api": [
     "title": "Edit an existing environment",
     "version": "1.0.0",
     "name": "edit_environment",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Environments",
     "parameter": {
       "fields": {
@@ -503,6 +518,11 @@ define({ "api": [
     "title": "Get all environments",
     "version": "1.0.0",
     "name": "get_environments",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Environments",
     "success": {
       "fields": {
@@ -555,6 +575,11 @@ define({ "api": [
     "version": "1.0.0",
     "name": "rm_hostgorup",
     "group": "Environments",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -597,6 +622,11 @@ define({ "api": [
     "title": "Add a new hostgroup",
     "version": "1.0.0",
     "name": "add_hostgroup",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Hostgroups",
     "parameter": {
       "fields": {
@@ -634,6 +664,11 @@ define({ "api": [
     "version": "1.0.0",
     "name": "get_hostgroup",
     "group": "Hostgroups",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -697,6 +732,11 @@ define({ "api": [
     "title": "Get all hostgroups",
     "version": "1.0.0",
     "name": "get_hostgroups",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Hostgroups",
     "success": {
       "fields": {
@@ -747,6 +787,11 @@ define({ "api": [
     "url": "/hostgroups/<id>",
     "title": "Delete a single hostgroup",
     "version": "1.0.0",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "name": "rm_hostgorup",
     "group": "Hostgroups",
     "parameter": {
@@ -791,6 +836,11 @@ define({ "api": [
     "title": "Add a new node",
     "version": "1.0.0",
     "name": "add_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Nodes",
     "parameter": {
       "fields": {
@@ -834,6 +884,11 @@ define({ "api": [
     "title": "Get a single node",
     "version": "1.0.0",
     "name": "get_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Nodes",
     "parameter": {
       "fields": {
@@ -898,6 +953,11 @@ define({ "api": [
     "title": "Get all nodes",
     "version": "1.0.0",
     "name": "get_nodes",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Nodes",
     "success": {
       "fields": {
@@ -950,6 +1010,11 @@ define({ "api": [
     "version": "1.0.0",
     "name": "put_node",
     "group": "Nodes",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1020,6 +1085,11 @@ define({ "api": [
     "title": "Delete a single node",
     "version": "1.0.0",
     "description": "<p>Delete will not delete the node from the database The flag active is set to 0, and delete_date is set to NOW()</p>",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "name": "rm_node",
     "group": "Nodes",
     "parameter": {
