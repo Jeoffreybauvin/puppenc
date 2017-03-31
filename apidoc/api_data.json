@@ -19,6 +19,11 @@
         ]
       }
     },
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -48,6 +53,11 @@
     "title": "Edit an existing class",
     "version": "1.0.0",
     "name": "edit_class",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Classes",
     "success": {
       "fields": {
@@ -85,6 +95,11 @@
     "title": "Get a single class",
     "version": "1.0.0",
     "name": "get_class",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Classes",
     "parameter": {
       "fields": {
@@ -157,6 +172,11 @@
     "version": "1.0.0",
     "name": "get_classes",
     "group": "Classes",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -214,6 +234,11 @@
     "title": "Delete a single class",
     "version": "1.0.0",
     "name": "rm_class",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "group": "Classes",
     "parameter": {
       "fields": {
@@ -1039,5 +1064,150 @@
     ],
     "filename": "app/nodes/routes.py",
     "groupTitle": "Nodes"
+  },
+  {
+    "type": "get",
+    "url": "/tokens/<id>",
+    "title": "Get a token",
+    "version": "1.0.0",
+    "name": "get_token",
+    "group": "Tokens",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The token</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "duration",
+            "description": "<p>The token's validity</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -H \"Content-Type: application/json\" \\\nhttp://127.0.0.1:5000/api/v1/tokens",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/users/routes.py",
+    "groupTitle": "Tokens"
+  },
+  {
+    "type": "get",
+    "url": "/users/<id>",
+    "title": "Get a single user",
+    "version": "1.0.0",
+    "name": "get_user",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The user's id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The user's name</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -H \"Content-Type: application/json\" \\\nhttp://127.0.0.1:5000/api/v1/users/1",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/users/routes.py",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "post",
+    "url": "/users",
+    "title": "Create a user",
+    "version": "1.0.0",
+    "name": "post_user",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The user's name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Password",
+            "optional": false,
+            "field": "password",
+            "description": "<p>The users's password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The user's name</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{\"name\":\"my_username\",\"password\":\"my_password\"}' \\\nhttp://127.0.0.1:5000/api/v1/users",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/users/routes.py",
+    "groupTitle": "Users"
   }
 ]
