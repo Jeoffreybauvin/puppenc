@@ -5,3 +5,5 @@ mysqlclient
 pyyaml
 flask-marshmallow
 marshmallow-sqlalchemy
+flask_httpauth
+passlib

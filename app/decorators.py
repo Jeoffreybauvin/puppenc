@@ -1,6 +1,19 @@
 from flask import Flask, Blueprint, make_response, request, abort, g, jsonify
 from functools import wraps
-from app.puppenc import api, db, app, PuppencResource
+from app.puppenc import api, db, app, auth, PuppencResource
+from app.users.models import User
+
+@auth.verify_password
+def verify_password(name_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(name_or_token)
+    if not user:
+        # try to authenticate with name/password
+        user = User.query.filter_by(name=name_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
 
 # decorator
 # check if body is valid (valid json)

@@ -89,3 +89,5 @@ ENV/
 .ropeproject
 
 samples/
+docker-compose.yml
+config.py

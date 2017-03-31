@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db, app, PuppencResource
+from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
 
 from app.nodes.models import Node
@@ -12,6 +12,7 @@ class Nodes(Resource):
         self.node_schema = NodeSchema()
         self.nodes_schema = NodeSchema(many=True)
 
+    @auth.login_required
     @get_item(Node)
     def get(self, page=1, id=None):
         """
@@ -44,6 +45,7 @@ class Nodes(Resource):
             return self.node_schema.jsonify(g.obj_info)
 
 
+    @auth.login_required
     @is_unique_item(Node)
     @body_is_valid
     @post_item(Node)
@@ -62,6 +64,7 @@ class Nodes(Resource):
         """
         pass
 
+    @auth.login_required
     def put(self, id):
         """
         @api {put} /nodes/<id> Edit a node
@@ -99,6 +102,7 @@ class Nodes(Resource):
             db.session.commit()
             return { "success": True, "message": "Node successfully modified" }, 200
 
+    @auth.login_required
     @get_item(Node)
     def delete(self, id):
         """

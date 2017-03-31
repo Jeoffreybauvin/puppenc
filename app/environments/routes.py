@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db, app, PuppencResource
+from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
 
 from app.environments.models import Environment
@@ -12,6 +12,7 @@ class Environments(PuppencResource):
         self.environment_schema = EnvironmentSchema()
         self.environments_schema = EnvironmentSchema(many=True)
 
+    @auth.login_required
     @get_item(Environment)
     def get(self, page=1, id=None):
         """
@@ -43,6 +44,7 @@ class Environments(PuppencResource):
         else:
             return self.environment_schema.jsonify(g.obj_info)
 
+    @auth.login_required
     @body_is_valid
     @is_unique_item(Environment)
     @post_item(Environment)
@@ -57,6 +59,7 @@ class Environments(PuppencResource):
         """
         pass
 
+    @auth.login_required
     @body_is_valid
     @is_unique_item(Environment)
     @get_item(Environment)
@@ -77,6 +80,7 @@ class Environments(PuppencResource):
         """
         pass
 
+    @auth.login_required
     @get_item(Environment)
     @delete_item(Environment)
     def delete(self, id):

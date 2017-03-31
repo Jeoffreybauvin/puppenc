@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, request
 
-from app.puppenc import api, db, app, PuppencResource
+from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
 
 from app.hostgroups.models import Hostgroup
@@ -12,6 +12,7 @@ class Hostgroups(PuppencResource):
         self.hostgroup_schema = HostgroupSchema()
         self.hostgroups_schema = HostgroupSchema(many=True)
 
+    @auth.login_required
     @get_item(Hostgroup)
     def get(self, page=1, id=None):
         """
@@ -43,6 +44,7 @@ class Hostgroups(PuppencResource):
         else:
             return self.hostgroup_schema.jsonify(g.obj_info)
 
+    @auth.login_required
     @is_unique_item(Hostgroup)
     @body_is_valid
     @post_item(Hostgroup)
@@ -57,6 +59,7 @@ class Hostgroups(PuppencResource):
         """
         pass
 
+    @auth.login_required
     @get_item(Hostgroup)
     @delete_item(Hostgroup)
     def delete(self, id):
