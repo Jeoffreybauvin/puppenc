@@ -90,3 +90,5 @@ ENV/
 
 samples/
 docker-compose.yml
+
+config.py
