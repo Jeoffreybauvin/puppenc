@@ -6,11 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow import validate, fields
 from functools import wraps
+from flask.ext.httpauth import HTTPBasicAuth
 
 WHOAMI='puppenc'
 
 app = Flask(WHOAMI)
-
 api_bp = Blueprint('api', WHOAMI)
 
 app.config.update(dict(
@@ -33,6 +33,7 @@ app.config.update(dict(SQLALCHEMY_DATABASE_URI = app.config['SQLALCHEMY_DATABASE
 api = Api(api_bp, prefix=app.config['PREFIX'])
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+auth = HTTPBasicAuth()
 
 def init_db():
     """Create the database."""
@@ -68,6 +69,7 @@ from app.hostgroups.routes import Hostgroups
 from app.classes.routes import Classes
 from app.nodes.routes import Nodes
 
+from app.users.routes import Users, Tokens
 from app.enc.routes import Enc
 
 # Let's expose something :)
@@ -76,6 +78,8 @@ api.add_resource(Hostgroups, '/hostgroups', '/hostgroups/<int:id>')
 api.add_resource(Environments, '/environments', '/environments/<int:id>')
 api.add_resource(Classes, '/classes', '/classes/<int:id>')
 api.add_resource(Enc, '/enc/<string:node_name>')
+api.add_resource(Users, '/users', '/users/<int:id>')
+api.add_resource(Tokens, '/tokens')
 
 class Index(Resource):
     def get(self):
