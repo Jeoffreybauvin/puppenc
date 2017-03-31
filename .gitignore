@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 
 samples/
+docker-compose.yml
