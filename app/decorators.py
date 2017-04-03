@@ -69,6 +69,7 @@ def get_item(Type):
                 return { "success": False, "message": u"%s not found" % type  }, 404
 
             g.obj_info = obj
+            app.logger.info(u"Get Item %s, %s by %s" % (Type, g.obj_info, g.user.name))            
             return f(*args, **kwargs)
         return func_wrapper
     return wrapper
@@ -84,7 +85,7 @@ def post_item(Type):
             db.session.add(obj)
             db.session.commit()
 
-            app.logger.info(u"Create Item %s %s" % (Type, g.obj_name))
+            app.logger.info(u"Create Item %s %s by %s" % (Type, g.obj_name, g.user.name))
             return jsonify({obj.id: {
                 'name': obj.name,
             }})
@@ -103,7 +104,7 @@ def edit_item(Type):
             Type.query.filter_by(id=obj_id).update({ "name": g.obj_name }, synchronize_session=False)
 
             db.session.commit()
-            app.logger.info(u"Edit Item %s %s" % (Type, g.obj_name))
+            app.logger.info(u"Edit Item %s %s by %s" % (Type, g.obj_name, g.user.name))
             return { "success": True, "message": "successfully modified" }, 200
 
             return f(*args, **kwargs)
@@ -119,7 +120,7 @@ def delete_item(Type):
             response = f(*args, **kwargs)
             db.session.delete(g.obj_info)
             db.session.commit()
-            app.logger.info(u"Delete Item %s" % g.obj_info)
+            app.logger.info(u"Delete Item %s by %s" % g.obj_info, g.user.name)
             return { "success": True, "message": u"%s deleted" % g.obj_info }, 200
         return func_wrapper
     return wrapper
