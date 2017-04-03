@@ -81,7 +81,7 @@ api.add_resource(Enc, '/enc/<string:node_name>')
 api.add_resource(Users, '/users', '/users/<int:id>')
 api.add_resource(Tokens, '/tokens')
 
-class Index(Resource):
+class Index(PuppencResource):
     def get(self):
         return { "name": "Puppenc", "version": app.config['VERSION']}, 200
 
