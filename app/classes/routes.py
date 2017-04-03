@@ -20,6 +20,7 @@ class Classes(PuppencResource):
         @apiVersion 1.0.0
         @apiName get_classes
         @apiGroup Classes
+        @apiPermission user
         @apiSuccess {Number}    id              The class's id.
         @apiSuccess {String}    name            The class's name.
         @apiSuccess {Datetime}  insert_date     The class's inserted date
@@ -33,6 +34,7 @@ class Classes(PuppencResource):
         @api {get} /classes/<id> Get a single class
         @apiVersion 1.0.0
         @apiName get_class
+        @apiPermission user
         @apiGroup Classes
         @apiParam   {Number}    id              The class's id.
         @apiSuccess {Number}    id              The class's id.
@@ -59,6 +61,7 @@ class Classes(PuppencResource):
         @apiName add_class
         @apiGroup Classes
         @apiParam   {String}    name            The class's name.
+        @apiPermission user
         @apiSuccess {Number}    id              The class's id.
         @apiExample {curl} Example usage :
             curl -X POST -H "Content-Type: application/json" \
@@ -77,6 +80,7 @@ class Classes(PuppencResource):
         @api {put} /classes/<id> Edit an existing class
         @apiVersion 1.0.0
         @apiName edit_class
+        @apiPermission user
         @apiGroup Classes
         @apiSuccess {Number}    success         True if success
         @apiSuccess {Number}    message         A information message
@@ -95,6 +99,7 @@ class Classes(PuppencResource):
         @api {delete} /classes/<id> Delete a single class
         @apiVersion 1.0.0
         @apiName rm_class
+        @apiPermission user
         @apiGroup Classes
         @apiParam   {Number}    id              The class's id.
         @apiSuccess {Boolean}   success         Success (True if ok).

@@ -16,6 +16,7 @@ class Enc(Resource):
         @apiVersion 1.0.0
         @apiName get_enc
         @apiGroup ENC
+        @apiPermission user
         @apiParam   {String}    node_name       The node's name
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.

@@ -19,6 +19,7 @@ class Hostgroups(PuppencResource):
         @api {get} /hostgroups Get all hostgroups
         @apiVersion 1.0.0
         @apiName get_hostgroups
+        @apiPermission user
         @apiGroup Hostgroups
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
@@ -32,6 +33,7 @@ class Hostgroups(PuppencResource):
         @apiVersion 1.0.0
         @apiName get_hostgroup
         @apiGroup Hostgroups
+        @apiPermission user
         @apiParam   {Number}    id              The hostgroup's id.
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
@@ -53,6 +55,7 @@ class Hostgroups(PuppencResource):
         @api {post} /hostgroups Add a new hostgroup
         @apiVersion 1.0.0
         @apiName add_hostgroup
+        @apiPermission user
         @apiGroup Hostgroups
         @apiParam   {String}    name            The hostgroup's name.
         @apiSuccess {Number}    id              The hostgroup's id.
@@ -66,6 +69,7 @@ class Hostgroups(PuppencResource):
         """
         @api {delete} /hostgroups/<id> Delete a single hostgroup
         @apiVersion 1.0.0
+        @apiPermission user
         @apiName rm_hostgorup
         @apiGroup Hostgroups
         @apiParam   {Number}    id              The hostgroup's id.

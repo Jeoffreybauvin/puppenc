@@ -28,7 +28,6 @@ class User(db.Model):
 
     def verify_auth_token(token):
         s = Serializer(app.config['SECRET_KEY'])
-        app.logger.info(token)
         try:
             data = s.loads(token)
         except SignatureExpired:
@@ -36,4 +35,5 @@ class User(db.Model):
         except BadSignature:
             return None    # invalid token
         user = User.query.get(data['id'])
+        # app.logger.info('Sending a token for user %s', user)
         return user

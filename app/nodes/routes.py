@@ -19,6 +19,7 @@ class Nodes(Resource):
         @api {get} /nodes Get all nodes
         @apiVersion 1.0.0
         @apiName get_nodes
+        @apiPermission user
         @apiGroup Nodes
         @apiSuccess {Number}    id              The node's id.
         @apiSuccess {String}    name            The node's name.
@@ -31,6 +32,7 @@ class Nodes(Resource):
         @api {get} /nodes/<id> Get a single node
         @apiVersion 1.0.0
         @apiName get_node
+        @apiPermission user
         @apiGroup Nodes
         @apiParam   {Number}    id              The node's id.
         @apiSuccess {Number}    id              The node's id.
@@ -54,6 +56,7 @@ class Nodes(Resource):
         @api {post} /nodes Add a new node
         @apiVersion 1.0.0
         @apiName add_node
+        @apiPermission user
         @apiGroup Nodes
         @apiParam   {String}    name            The node's name.
         @apiSuccess {Number}    id              The node's id.
@@ -71,6 +74,7 @@ class Nodes(Resource):
         @apiVersion 1.0.0
         @apiName put_node
         @apiGroup Nodes
+        @apiPermission user
         @apiParam {Number}    id              The node's id.
         @apiParam {String}    name            The node's name.
         @apiParam {Number}    environment_id  The node's environment_id.
@@ -110,6 +114,7 @@ class Nodes(Resource):
         @apiVersion 1.0.0
         @apiDescription Delete will not delete the node from the database
             The flag active is set to 0, and delete_date is set to NOW()
+        @apiPermission user
         @apiName rm_node
         @apiGroup Nodes
         @apiParam   {Number}    id              The node's id.

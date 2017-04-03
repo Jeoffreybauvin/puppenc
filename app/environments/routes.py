@@ -19,6 +19,7 @@ class Environments(PuppencResource):
         @api {get} /environments Get all environments
         @apiVersion 1.0.0
         @apiName get_environments
+        @apiPermission user
         @apiGroup Environments
         @apiSuccess {Number}    id              The environment's id.
         @apiSuccess {String}    name            The environment's name.
@@ -30,6 +31,7 @@ class Environments(PuppencResource):
         """
         @api {get} /environments/<id> Get a single environment
         @apiVersion 1.0.0
+        @apiPermission user
         @apiName get_environment
         @apiGroup Environments
         @apiParam   {Number}    id              The environment's id.
@@ -53,6 +55,7 @@ class Environments(PuppencResource):
         @api {post} /environments Add a new environment
         @apiVersion 1.0.0
         @apiName add_environment
+        @apiPermission user
         @apiGroup Environments
         @apiParam   {String}    name            The environment's name.
         @apiSuccess {Number}    id              The environment's id.
@@ -69,6 +72,7 @@ class Environments(PuppencResource):
         @api {put} /environments/<id> Edit an existing environment
         @apiVersion 1.0.0
         @apiName edit_environment
+        @apiPermission user
         @apiGroup Environments
         @apiParam   {String}    name            The environment's name.
         @apiSuccess {Number}    success         True if success
@@ -89,6 +93,7 @@ class Environments(PuppencResource):
         @apiVersion 1.0.0
         @apiName rm_hostgorup
         @apiGroup Environments
+        @apiPermission user
         @apiParam   {Number}    id              The environment's id.
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
