@@ -37,16 +37,30 @@ auth = HTTPBasicAuth()
 
 def init_db():
     """Create the database."""
-    # print("Will create " + app.config['DATABASE'])
-    # engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
-    # engine.execute('CREATE DATABASE ' + app.config['DATABASE']) #create db - throw an error if already exists
-    db.create_all()
+    try:
+        print("Trying to create database " + app.config['DB_NAME'])
+        engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
+        engine.execute('CREATE DATABASE ' + app.config['DB_NAME']) #create db - throw an error if already exists
+    except:
+        app.logger.warning('Aborting database creation ! Database already exists')
+
+    try:
+        db.create_all()
+    except:
+        app.logger.error('Aborting, something went wrong on creating the tables')
+
+    app.logger.info('Tables creation : done.')
 
 def destroy_db():
     """ Destroy DB ! WARNING ! """
-    print("Will destroy " + app.config['DATABASE'])
-    engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
-    engine.execute('DROP DATABASE ' + app.config['DATABASE']) #create db - throw an error if already exists
+    app.logger.info("I'm destroying " + app.config['DB_NAME'])
+    try:
+        engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_CONN']) # connect to server
+        engine.execute('DROP DATABASE ' + app.config['DB_NAME']) #create db - throw an error if already exists
+    except:
+        app.logger.info('Error on destroying database')
+
+    app.logger.info('Database deleted')
 
 @api.representation('text/plain')
 def output_yaml(data, code, headers=None):
