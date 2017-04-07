@@ -22,6 +22,7 @@ if args.setup:
     sys.exit()
 
 elif args.destroy:
+    # Bye bye database
     puppenc.destroy_db()
     sys.exit()
 else:
