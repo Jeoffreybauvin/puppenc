@@ -60,16 +60,23 @@ def get_item(Type):
             obj_id = kwargs.get('id')
             nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
             cur_page = int(request.args.get('page', 1))
-            if obj_id:
-                obj = Type.query.filter_by(id=obj_id).first()
+
+            filter = str(request.args.get('filter', ''))
+
+            if filter:
+                my_filter = "%" + filter + "%"
+                obj = Type.query.filter(Type.name.like(my_filter)).all()
             else:
-                obj = Type.query.paginate(cur_page, nb_limit).items
+                if obj_id:
+                    obj = Type.query.filter_by(id=obj_id).first()
+                else:
+                    obj = Type.query.paginate(cur_page, nb_limit).items
 
             if obj is None:
                 return { "success": False, "message": u"%s not found" % type  }, 404
 
             g.obj_info = obj
-            app.logger.info(u"Get Item %s, %s by %s" % (Type, g.obj_info, g.user.name))            
+            app.logger.info(u"Get Item %s, %s by %s" % (Type, g.obj_info, g.user.name))
             return f(*args, **kwargs)
         return func_wrapper
     return wrapper
