@@ -1167,6 +1167,19 @@ define({ "api": [
         ]
       }
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "duration",
+            "description": "<p>Pass a custom duration (seconds)</p>"
+          }
+        ]
+      }
+    },
     "permission": [
       {
         "name": "user"

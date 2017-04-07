@@ -70,6 +70,7 @@ class Tokens(PuppencResource):
     @apiName get_token
     @apiGroup Tokens
     @apiSuccess {String}    token              The token
+    @apiParam   {Number}    duration           Pass a custom duration (seconds)
     @apiSuccess {Number}    duration           The token's validity
     @apiPermission user
     @apiExample {curl} Example usage :
@@ -79,5 +80,6 @@ class Tokens(PuppencResource):
     @auth.login_required
     def get(self):
         token = g.user.generate_auth_token()
+        duration = int(request.args.get('duration', app.config['AUTH_DURATION']))
         app.logger.info("Generate a token for %s", g.user.name)
-        return jsonify({'token': token.decode('ascii'), 'duration': app.config['AUTH_DURATION']})
+        return jsonify({'token': token.decode('ascii'), 'duration': duration})
