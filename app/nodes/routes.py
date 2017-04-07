@@ -17,10 +17,13 @@ class Nodes(Resource):
     def get(self, id=None):
         """
         @api {get} /nodes Get all nodes
-        @apiVersion 1.0.0
         @apiName get_nodes
-        @apiPermission user
         @apiGroup Nodes
+        @apiVersion 1.0.0
+        @apiPermission user
+        @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display
+        @apiParam   {String}    [page=1]        (query parameter) Current page
+        @apiParam   {String}    [filter]        (query parameter) Filter on name parameter
         @apiSuccess {Number}    id              The node's id.
         @apiSuccess {String}    name            The node's name.
         @apiSuccess {Datetime}  insert_date     The node's inserted date
@@ -29,7 +32,7 @@ class Nodes(Resource):
         """
 
         """
-        @api {get} /nodes/<id> Get a single node
+        @api {get} /nodes/:id Get a single node
         @apiVersion 1.0.0
         @apiName get_node
         @apiPermission user
@@ -70,7 +73,7 @@ class Nodes(Resource):
     @auth.login_required
     def put(self, id):
         """
-        @api {put} /nodes/<id> Edit a node
+        @api {put} /nodes/:id Edit a node
         @apiVersion 1.0.0
         @apiName put_node
         @apiGroup Nodes
@@ -110,7 +113,7 @@ class Nodes(Resource):
     @get_item(Node)
     def delete(self, id):
         """
-        @api {delete} /nodes/<id> Delete a single node
+        @api {delete} /nodes/:id Delete a single node
         @apiVersion 1.0.0
         @apiDescription Delete will not delete the node from the database
             The flag active is set to 0, and delete_date is set to NOW()
@@ -121,7 +124,7 @@ class Nodes(Resource):
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
         @apiExample {curl} Example usage :
-            curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/<id>
+            curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/:id
         """
         Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
         db.session.commit()

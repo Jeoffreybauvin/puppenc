@@ -49,7 +49,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/classes/<id>",
+    "url": "/classes/:id",
     "title": "Edit an existing class",
     "version": "1.0.0",
     "name": "edit_class",
@@ -82,7 +82,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"role::my_class\" }' \\\nhttp://127.0.0.1:5000/api/v1/classes/<id>",
+        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"role::my_class\" }' \\\nhttp://127.0.0.1:5000/api/v1/classes/:id",
         "type": "curl"
       }
     ],
@@ -91,16 +91,16 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/classes/<id>",
+    "url": "/classes/:id",
     "title": "Get a single class",
-    "version": "1.0.0",
     "name": "get_class",
+    "group": "Classes",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Classes",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -158,7 +158,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X GET http://127.0.0.1:5000/api/v1/classes/<id>",
+        "content": "curl -X GET http://127.0.0.1:5000/api/v1/classes/:id",
         "type": "curl"
       }
     ],
@@ -169,14 +169,43 @@ define({ "api": [
     "type": "get",
     "url": "/classes",
     "title": "Get all classes",
-    "version": "1.0.0",
     "name": "get_classes",
     "group": "Classes",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>(query parameter) Objects per page to display</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>(query parameter) Current page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "filter",
+            "description": "<p>(query parameter) Filter on name parameter</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -221,7 +250,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X GET http://127.0.0.1:5000/api/v1/classes",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/classes",
         "type": "curl"
       }
     ],
@@ -230,7 +259,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/classes/<id>",
+    "url": "/classes/:id",
     "title": "Delete a single class",
     "version": "1.0.0",
     "name": "rm_class",
@@ -276,7 +305,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/classes/<id>",
+        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/classes/:id",
         "type": "curl"
       }
     ],
@@ -356,14 +385,14 @@ define({ "api": [
     "type": "post",
     "url": "/environments",
     "title": "Add a new environment",
-    "version": "1.0.0",
     "name": "add_environment",
+    "group": "Environments",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Environments",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -372,7 +401,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>The environment's name.</p>"
+            "description": "<p>(json document) The environment's name.</p>"
           }
         ]
       }
@@ -390,21 +419,28 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_environment\" }' \\\nhttp://127.0.0.1:5000/api/v1/environments",
+        "type": "curl"
+      }
+    ],
     "filename": "app/environments/routes.py",
     "groupTitle": "Environments"
   },
   {
     "type": "put",
-    "url": "/environments/<id>",
+    "url": "/environments/:id",
     "title": "Edit an existing environment",
-    "version": "1.0.0",
     "name": "edit_environment",
+    "group": "Environments",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Environments",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -413,7 +449,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>The environment's name.</p>"
+            "description": "<p>(uri parameter) The environment's id</p>"
           }
         ]
       }
@@ -441,7 +477,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_environment\" }' \\\nhttp://127.0.0.1:5000/api/v1/environments/<id>",
+        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_environment\" }' \\\nhttp://127.0.0.1:5000/api/v1/environments/:id",
         "type": "curl"
       }
     ],
@@ -450,16 +486,16 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/environments/<id>",
+    "url": "/environments/:id",
     "title": "Get a single environment",
+    "name": "get_environment",
+    "group": "Environments",
     "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "name": "get_environment",
-    "group": "Environments",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -468,7 +504,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>The environment's id.</p>"
+            "description": "<p>(uri parameter) The environment's id.</p>"
           }
         ]
       }
@@ -514,6 +550,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/environments/1",
+        "type": "curl"
+      }
+    ],
     "filename": "app/environments/routes.py",
     "groupTitle": "Environments"
   },
@@ -521,14 +564,43 @@ define({ "api": [
     "type": "get",
     "url": "/environments",
     "title": "Get all environments",
-    "version": "1.0.0",
     "name": "get_environments",
+    "group": "Environments",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Environments",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>(query parameter) Objects per page to display</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>(query parameter) Current page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "filter",
+            "description": "<p>(query parameter) Filter on name parameter</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -537,14 +609,14 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>The environment's id.</p>"
+            "description": "<p>The environment's id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>The environment's name.</p>"
+            "description": "<p>The environment's name</p>"
           },
           {
             "group": "Success 200",
@@ -570,16 +642,23 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/environments",
+        "type": "curl"
+      }
+    ],
     "filename": "app/environments/routes.py",
     "groupTitle": "Environments"
   },
   {
     "type": "delete",
-    "url": "/environments/<id>",
+    "url": "/environments/:id",
     "title": "Delete a single environment",
-    "version": "1.0.0",
     "name": "rm_hostgorup",
     "group": "Environments",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
@@ -593,7 +672,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>The environment's id.</p>"
+            "description": "<p>(uri parameter) The environment's id.</p>"
           }
         ]
       }
@@ -618,6 +697,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/environments/:id",
+        "type": "curl"
+      }
+    ],
     "filename": "app/environments/routes.py",
     "groupTitle": "Environments"
   },
@@ -735,14 +821,43 @@ define({ "api": [
     "type": "get",
     "url": "/hostgroups",
     "title": "Get all hostgroups",
-    "version": "1.0.0",
     "name": "get_hostgroups",
+    "group": "Hostgroups",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Hostgroups",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>(query parameter) Objects per page to display</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>(query parameter) Current page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "filter",
+            "description": "<p>(query parameter) Filter on name parameter</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -885,7 +1000,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/nodes/<id>",
+    "url": "/nodes/:id",
     "title": "Get a single node",
     "version": "1.0.0",
     "name": "get_node",
@@ -956,14 +1071,43 @@ define({ "api": [
     "type": "get",
     "url": "/nodes",
     "title": "Get all nodes",
-    "version": "1.0.0",
     "name": "get_nodes",
+    "group": "Nodes",
+    "version": "1.0.0",
     "permission": [
       {
         "name": "user"
       }
     ],
-    "group": "Nodes",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>(query parameter) Objects per page to display</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>(query parameter) Current page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "filter",
+            "description": "<p>(query parameter) Filter on name parameter</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1010,7 +1154,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/nodes/<id>",
+    "url": "/nodes/:id",
     "title": "Edit a node",
     "version": "1.0.0",
     "name": "put_node",
@@ -1086,7 +1230,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/nodes/<id>",
+    "url": "/nodes/:id",
     "title": "Delete a single node",
     "version": "1.0.0",
     "description": "<p>Delete will not delete the node from the database The flag active is set to 0, and delete_date is set to NOW()</p>",
@@ -1133,7 +1277,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/<id>",
+        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/:id",
         "type": "curl"
       }
     ],

@@ -60,7 +60,6 @@ def get_item(Type):
             obj_id = kwargs.get('id')
             nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
             cur_page = int(request.args.get('page', 1))
-
             filter = str(request.args.get('filter', ''))
 
             if filter:

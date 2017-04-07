@@ -17,10 +17,13 @@ class Hostgroups(PuppencResource):
     def get(self, id=None):
         """
         @api {get} /hostgroups Get all hostgroups
-        @apiVersion 1.0.0
         @apiName get_hostgroups
-        @apiPermission user
         @apiGroup Hostgroups
+        @apiVersion 1.0.0
+        @apiPermission user
+        @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display
+        @apiParam   {String}    [page=1]        (query parameter) Current page
+        @apiParam   {String}    [filter]        (query parameter) Filter on name parameter
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
