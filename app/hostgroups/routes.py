@@ -14,7 +14,7 @@ class Hostgroups(PuppencResource):
 
     @auth.login_required
     @get_item(Hostgroup)
-    def get(self, page=1, id=None):
+    def get(self, id=None):
         """
         @api {get} /hostgroups Get all hostgroups
         @apiVersion 1.0.0

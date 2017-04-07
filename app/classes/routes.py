@@ -14,7 +14,7 @@ class Classes(PuppencResource):
 
     @auth.login_required
     @get_item(Class)
-    def get(self, page=1, id=None):
+    def get(self, id=None):
         """
         @api {get} /classes Get all classes
         @apiVersion 1.0.0

@@ -14,7 +14,7 @@ class Nodes(Resource):
 
     @auth.login_required
     @get_item(Node)
-    def get(self, page=1, id=None):
+    def get(self, id=None):
         """
         @api {get} /nodes Get all nodes
         @apiVersion 1.0.0

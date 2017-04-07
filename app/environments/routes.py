@@ -14,7 +14,7 @@ class Environments(PuppencResource):
 
     @auth.login_required
     @get_item(Environment)
-    def get(self, page=1, id=None):
+    def get(self, id=None):
         """
         @api {get} /environments Get all environments
         @apiVersion 1.0.0
