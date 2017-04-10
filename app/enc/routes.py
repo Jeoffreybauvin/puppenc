@@ -13,17 +13,20 @@ class Enc(PuppencResource):
     def get(self, page=1, node_name=None):
         """
         @api {get} /enc/<node-name> Get node informations (ENC)
-        @apiVersion 1.0.0
         @apiName get_enc
         @apiGroup ENC
         @apiPermission user
-        @apiParam   {String}    node_name       The node's name
+        @apiVersion 1.0.0
+        @apiParam   {String}    node_name       (uri parameter) The node's name
+        @apiParam   {String}    output=yaml     (query parameter) Output result. Example : json
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
         @apiSuccess {Datetime}  update_date     The hostgroup's updated date
         @apiSuccess {Datetime}  delete_date     The hostgroup's deleted date
         """
+        output = str(request.args.get('output', 'yaml'))
+
         if not node_name:
             obj = Node.query.paginate(page, 10).items
             return { "success": False, "message": "No node provided" }, 304
@@ -80,4 +83,8 @@ class Enc(PuppencResource):
 
             if not res:
                 return { "success": False, "message": "Node not found" }, 404
-            return output_yaml(res, 200)
+            else:
+                if output == 'json':
+                    return jsonify(res, 200)
+                else:
+                    return output_yaml(res, 200)

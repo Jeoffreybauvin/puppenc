@@ -316,7 +316,6 @@ define({ "api": [
     "type": "get",
     "url": "/enc/<node-name>",
     "title": "Get node informations (ENC)",
-    "version": "1.0.0",
     "name": "get_enc",
     "group": "ENC",
     "permission": [
@@ -324,6 +323,7 @@ define({ "api": [
         "name": "user"
       }
     ],
+    "version": "1.0.0",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -332,7 +332,15 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "node_name",
-            "description": "<p>The node's name</p>"
+            "description": "<p>(uri parameter) The node's name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "output",
+            "defaultValue": "yaml",
+            "description": "<p>(query parameter) Output result. Example : json</p>"
           }
         ]
       }
