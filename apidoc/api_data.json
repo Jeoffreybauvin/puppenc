@@ -1288,9 +1288,14 @@
     "type": "get",
     "url": "/tokens/<id>",
     "title": "Get a token",
-    "version": "1.0.0",
     "name": "get_token",
     "group": "Tokens",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -1324,11 +1329,6 @@
         ]
       }
     },
-    "permission": [
-      {
-        "name": "user"
-      }
-    ],
     "examples": [
       {
         "title": "Example usage :",
@@ -1374,7 +1374,7 @@
     },
     "permission": [
       {
-        "name": "none"
+        "name": "public"
       }
     ],
     "examples": [
@@ -1391,9 +1391,14 @@
     "type": "post",
     "url": "/users",
     "title": "Create a user",
-    "version": "1.0.0",
     "name": "post_user",
     "group": "Users",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "public"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1402,14 +1407,14 @@
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>The user's name</p>"
+            "description": "<p>(json document) The user's name</p>"
           },
           {
             "group": "Parameter",
             "type": "Password",
             "optional": false,
             "field": "password",
-            "description": "<p>The users's password</p>"
+            "description": "<p>(json document)The users's password</p>"
           }
         ]
       }
@@ -1427,11 +1432,6 @@
         ]
       }
     },
-    "permission": [
-      {
-        "name": "none"
-      }
-    ],
     "examples": [
       {
         "title": "Example usage :",

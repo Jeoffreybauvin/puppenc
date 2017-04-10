@@ -100,4 +100,5 @@ class Index(PuppencResource):
         return { "name": "Puppenc", "version": app.config['VERSION']}, 200
 
 api.add_resource(Index, '/', '/index')
+
 app.register_blueprint(api_bp)
