@@ -596,7 +596,7 @@ define({ "api": [
             "type": "String",
             "optional": true,
             "field": "filter",
-            "description": "<p>(query parameter) Filter on name parameter</p>"
+            "description": "<p>(query parameter) Filter on name parameter : same syntax from LIKE MySQL : %variable%</p>"
           }
         ]
       }
