@@ -1,14 +1,14 @@
 from flask_restful import Resource
-from flask import jsonify, request
+from flask import jsonify, request, g
 
-from app.puppenc import api, db, output_yaml, auth
+from app.puppenc import app, api, db, output_yaml, auth, PuppencResource
 
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
 from app.environments.models import Environment
 from app.classes.models import Class
 
-class Enc(Resource):
+class Enc(PuppencResource):
     @auth.login_required
     def get(self, page=1, node_name=None):
         """
@@ -16,6 +16,7 @@ class Enc(Resource):
         @apiVersion 1.0.0
         @apiName get_enc
         @apiGroup ENC
+        @apiPermission user
         @apiParam   {String}    node_name       The node's name
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
@@ -64,6 +65,7 @@ class Enc(Resource):
                 Node.name == node_name
             ).first()
 
+            app.logger.info('Get ENC on %s, by %s', node_name, g.user.name)
             # We need to display it on "ENC" format
             res = {
                 'classes': [

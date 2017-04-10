@@ -14,12 +14,16 @@ class Hostgroups(PuppencResource):
 
     @auth.login_required
     @get_item(Hostgroup)
-    def get(self, page=1, id=None):
+    def get(self, id=None):
         """
         @api {get} /hostgroups Get all hostgroups
-        @apiVersion 1.0.0
         @apiName get_hostgroups
         @apiGroup Hostgroups
+        @apiVersion 1.0.0
+        @apiPermission user
+        @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display
+        @apiParam   {String}    [page=1]        (query parameter) Current page
+        @apiParam   {String}    [filter]        (query parameter) Filter on name parameter
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
@@ -32,6 +36,7 @@ class Hostgroups(PuppencResource):
         @apiVersion 1.0.0
         @apiName get_hostgroup
         @apiGroup Hostgroups
+        @apiPermission user
         @apiParam   {Number}    id              The hostgroup's id.
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
@@ -53,6 +58,7 @@ class Hostgroups(PuppencResource):
         @api {post} /hostgroups Add a new hostgroup
         @apiVersion 1.0.0
         @apiName add_hostgroup
+        @apiPermission user
         @apiGroup Hostgroups
         @apiParam   {String}    name            The hostgroup's name.
         @apiSuccess {Number}    id              The hostgroup's id.
@@ -66,6 +72,7 @@ class Hostgroups(PuppencResource):
         """
         @api {delete} /hostgroups/<id> Delete a single hostgroup
         @apiVersion 1.0.0
+        @apiPermission user
         @apiName rm_hostgorup
         @apiGroup Hostgroups
         @apiParam   {Number}    id              The hostgroup's id.
