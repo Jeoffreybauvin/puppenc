@@ -57,17 +57,16 @@ def get_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
-            obj_id = kwargs.get('id')
             nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
             cur_page = int(request.args.get('page', 1))
             filter = str(request.args.get('filter', ''))
+            obj_id = kwargs.get('id')
 
             if filter:
-                my_filter = "%" + filter + "%"
-                obj = Type.query.filter(Type.name.like(my_filter)).all()
+                obj = Type.query.filter(Type.name.like(filter)).all()
             else:
                 if obj_id:
-                    obj = Type.query.filter_by(id=obj_id).first()
+                    obj = Type.query.filter_by(id=int(obj_id)).first()
                 else:
                     obj = Type.query.paginate(cur_page, nb_limit).items
 
