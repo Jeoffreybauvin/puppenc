@@ -14,13 +14,13 @@ class Users(PuppencResource):
 
     """
     @api {post} /users Create a user
-    @apiVersion 1.0.0
     @apiName post_user
     @apiGroup Users
-    @apiParam   {String}    name              The user's name
-    @apiParam   {Password}  password          The users's password
+    @apiVersion 1.0.0
+    @apiPermission public
+    @apiParam   {String}    name              (json document) The user's name
+    @apiParam   {Password}  password          (json document)The users's password
     @apiSuccess {String}    name              The user's name
-    @apiPermission none
     @apiExample {curl} Example usage :
         curl -X POST -H "Content-Type: application/json" \
         -d '{"name":"my_username","password":"my_password"}' \
@@ -47,7 +47,7 @@ class Users(PuppencResource):
     @apiGroup Users
     @apiParam   {Number}    id                The user's id
     @apiSuccess {String}    name              The user's name
-    @apiPermission none
+    @apiPermission public
     @apiExample {curl} Example usage :
         curl -X GET -H "Content-Type: application/json" \
         http://127.0.0.1:5000/api/v1/users/1
@@ -66,13 +66,13 @@ class Tokens(PuppencResource):
 
     """
     @api {get} /tokens/<id> Get a token
-    @apiVersion 1.0.0
     @apiName get_token
     @apiGroup Tokens
+    @apiVersion 1.0.0
+    @apiPermission user
     @apiSuccess {String}    token              The token
     @apiParam   {Number}    duration           Pass a custom duration (seconds)
     @apiSuccess {Number}    duration           The token's validity
-    @apiPermission user
     @apiExample {curl} Example usage :
         curl -X GET -H "Content-Type: application/json" \
         http://127.0.0.1:5000/api/v1/tokens
@@ -81,5 +81,5 @@ class Tokens(PuppencResource):
     def get(self):
         token = g.user.generate_auth_token()
         duration = int(request.args.get('duration', app.config['AUTH_DURATION']))
-        app.logger.info("Generate a token for %s", g.user.name)
+        app.logger.info("Generate a token for %s", g.user)
         return jsonify({'token': token.decode('ascii'), 'duration': duration})
