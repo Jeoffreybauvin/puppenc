@@ -36,9 +36,10 @@ class Enc(PuppencResource):
             if not node:
                 return { "success": False, "message": "Node not found" }, 404
 
-            if node.hostgroup_id is None:
+            if node.hostgroup_id is None or node.environment_id is None:
                 class_name = ''
                 hostgroup_name = ''
+                environment_name = ''
             else:
                 hg_class = Node.query.join(
                     Hostgroup,
@@ -53,20 +54,30 @@ class Enc(PuppencResource):
                     Node.name == node_name
                 ).first()
 
-                class_name     = hg_class.class_name
-                hostgroup_name = hg_class.hostgroup_name
+                class_name       = hg_class.class_name
+                hostgroup_name   = hg_class.hostgroup_name
 
-            # Death query
-            environment_node = Node.query.join(
-                Environment,
-                Node.environment_id==Environment.id,
-            ).add_columns(
-                Node.id,
-                Node.environment_id,
-                Environment.name.label('environment_name'),
-            ).filter(
-                Node.name == node_name
-            ).first()
+
+                # Death query
+                environment_node = Node.query.join(
+                    Environment,
+                    Node.environment_id==Environment.id,
+                ).add_columns(
+                    Node.id,
+                    Node.environment_id,
+                    Environment.name.label('environment_name'),
+                ).filter(
+                    Node.name == node_name
+                ).first()
+
+                environment_name = environment_node.environment_name
+
+
+            if not hostgroup_name:
+                hostgroup_name = ''
+
+            if not environment_name:
+                environment_name = ''
 
             app.logger.info('Get ENC on %s, by %s', node_name, g.user)
             # We need to display it on "ENC" format
@@ -78,7 +89,7 @@ class Enc(PuppencResource):
                     'puppetmaster': '',
                     'hostgroup': hostgroup_name
                 },
-                'environment': environment_node.environment_name
+                'environment': environment_name
             }
 
             if not res:

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import jsonify, request
+from flask import jsonify, request, g
 
 from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
@@ -53,7 +53,7 @@ class Nodes(Resource):
     @auth.login_required
     @is_unique_item(Node)
     @body_is_valid
-    @post_item(Node)
+    # @post_item(Node)
     def post(self, id=None):
         """
         @api {post} /nodes Add a new node
@@ -68,7 +68,25 @@ class Nodes(Resource):
             -d '{ "name": "my_server", "environment_id":1 }' \
             http://127.0.0.1:5000/api/v1/nodes
         """
-        pass
+        content = request.get_json(silent=True)
+        if not 'environment_id' in content:
+            environment_id = None
+        else:
+            environment_id = content['environment_id']
+
+        if not 'hostgroup_id' in content:
+            hostgroup_id = None
+        else:
+            hostgroup_id = content['hostgroup_id']
+
+        obj = Node(g.obj_name, hostgroup_id=hostgroup_id, environment_id=environment_id)
+        db.session.add(obj)
+        db.session.commit()
+        app.logger.info(u"Create Item %s %s by %s" % (Node, g.obj_name, g.user))
+        return jsonify({obj.id: {
+            'name': obj.name,
+        }})
+
 
     @auth.login_required
     def put(self, id):
