@@ -81,5 +81,4 @@ class Tokens(PuppencResource):
     def get(self):
         duration = int(request.args.get('duration', app.config['AUTH_DURATION']))
         token = g.user.generate_auth_token(expiration=duration)
-        app.logger.info("Generate a token for %s", g.user)
         return jsonify({'token': token.decode('ascii'), 'duration': duration})

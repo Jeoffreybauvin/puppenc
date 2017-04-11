@@ -1,4 +1,4 @@
-from app.puppenc import db
+from app.puppenc import app, db
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 
 class Node(db.Model):
