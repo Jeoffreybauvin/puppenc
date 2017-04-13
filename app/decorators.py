@@ -85,7 +85,6 @@ def post_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
-
             obj = Type(g.obj_name)
             db.session.add(obj)
             db.session.commit()

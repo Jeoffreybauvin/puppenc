@@ -144,6 +144,14 @@ class Nodes(Resource):
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/:id
         """
-        Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
-        db.session.commit()
-        return { "success": True }, 200
+        if g.obj_info.active == 1:
+            Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
+            db.session.commit()
+            return { "success": True }, 200
+        else:
+            # Node is already deactivated, we can delete it
+            db.session.delete(g.obj_info)
+            db.session.commit()
+            app.logger.info(u"Delete Item %s" % g.user)
+            app.logger.info(u"%s Node %s by %s" % (request.method, g.obj_info, g.user))
+            return { "success": True, "message": u"%s deleted" % g.obj_info }, 200
