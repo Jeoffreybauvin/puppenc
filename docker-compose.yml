@@ -1,0 +1,23 @@
+---
+version: '2'
+services:
+  puppenc-api:
+    image: puppenc/api:latest
+    restart: always
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      -  $PWD:/puppenc
+    links:
+      - puppenc-mysql
+    entrypoint:
+      - python
+      - run.py
+  puppenc-mysql:
+    image: mysql:5.6
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'puppenc'
+      MYSQL_DATABASE: 'puppenc'

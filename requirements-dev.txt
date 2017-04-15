@@ -3,5 +3,8 @@ Flask-restful
 Flask-SqlAlchemy
 mysqlclient
 pyyaml
+flask-marshmallow
 marshmallow-sqlalchemy
 flask_admin
+flask_httpauth
+passlib
