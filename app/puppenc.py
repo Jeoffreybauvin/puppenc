@@ -16,6 +16,7 @@ api_bp = Blueprint('api', WHOAMI)
 app.config.update(dict(
     PROFILE = False,
     DEBUG = False,
+    ENABLE_AUTH = True,
     PREFIX = '/api/v1',
     VERSION = '0.1',
     OBJECTS_PER_PAGE = 10,
