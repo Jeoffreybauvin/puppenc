@@ -918,6 +918,75 @@ define({ "api": [
     "groupTitle": "Hostgroups"
   },
   {
+    "type": "put",
+    "url": "/hostgroups/:id",
+    "title": "Edit an hostgroup",
+    "version": "1.0.0",
+    "name": "put_hostgroup",
+    "group": "Hostgroups",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The hostgroup's id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The hostgroup's name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "class_id",
+            "description": "<p>The hostgroup's class_id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success (True if ok).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>A success or error message.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_hostgroup\" }' \\\nhttp://127.0.0.1:5000/api/v1/hostgroups/1",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/hostgroups/routes.py",
+    "groupTitle": "Hostgroups"
+  },
+  {
     "type": "delete",
     "url": "/hostgroups/<id>",
     "title": "Delete a single hostgroup",

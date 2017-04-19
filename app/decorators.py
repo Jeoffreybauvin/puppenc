@@ -106,12 +106,21 @@ def edit_item(Type):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
             obj_id = kwargs.get('id')
+            content = request.get_json(force=True, silent=True)
+
+            editable_properties = [ 'name', 'environment_id', 'class_id', 'hostgroup_id' ]
+            for prop in editable_properties:
+                if prop in content:
+                    try:
+                        Type.query.filter_by(id=obj_id).update({ prop: content[prop] }, synchronize_session=False)
+                    except:
+                        app.logger.info('Trying to update %s', prop)
+                else:
+                    app.logger.info('No %s given', prop)
 
             Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
-            Type.query.filter_by(id=obj_id).update({ "name": g.obj_name }, synchronize_session=False)
-
             db.session.commit()
-            app.logger.info(u"Edit Item %s %s by %s" % (Type, g.obj_name, g.user))
+            app.logger.info(u"Edit Item %s by %s" % (Type, g.user))
             return { "success": True, "message": "successfully modified" }, 200
 
             return f(*args, **kwargs)
