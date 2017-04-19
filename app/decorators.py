@@ -60,10 +60,17 @@ def get_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
-            nb_limit = int(request.args.get('limit', app.config['OBJECTS_PER_PAGE']))
-            cur_page = int(request.args.get('page', 1))
-            filter = str(request.args.get('filter', ''))
+            nb_limit   = int(request.args.get('_perPage', app.config['OBJECTS_PER_PAGE']))
+            cur_page   = int(request.args.get('_page', 1))
+            filters    = str(request.args.get('_filters', 1))
+            sort_dir   = str(request.args.get('_sortDir', 'asc'))
+            sort_field = str(request.args.get('_sortField', 'id'))
+            filter     = str(request.args.get('filter', ''))
+
             obj_id = kwargs.get('id')
+            sort = sort_field + " " + sort_dir
+
+
 
             if filter:
                 obj = Type.query.filter(Type.name.like(filter)).all()
@@ -71,7 +78,9 @@ def get_item(Type):
                 if obj_id:
                     obj = Type.query.filter_by(id=int(obj_id)).first()
                 else:
-                    obj = Type.query.paginate(cur_page, nb_limit).items
+                    q = Type.query.count()
+                    obj = Type.query.order_by(sort).paginate(cur_page, nb_limit).items
+                    g.count = q
 
             if obj is None:
                 return { "success": False, "message": u"%s not found" % type  }, 404
@@ -105,13 +114,22 @@ def edit_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
+            content = request.get_json(silent=True)
             obj_id = kwargs.get('id')
 
-            Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
-            Type.query.filter_by(id=obj_id).update({ "name": g.obj_name }, synchronize_session=False)
+            editable_properties = [ 'name', 'environment_id', 'class_id', 'hostgroup_id' ]
+            for prop in editable_properties:
+                if prop in content:
+                    try:
+                        Type.query.filter_by(id=obj_id).update({ prop: content[prop] }, synchronize_session=False)
+                    except:
+                        app.logger.info('Trying to update %s', prop)
+                else:
+                    app.logger.info('No %s given', prop)
 
+            Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
             db.session.commit()
-            app.logger.info(u"Edit Item %s %s by %s" % (Type, g.obj_name, g.user))
+            app.logger.info(u"Edit Item %s by %s" % (Type, g.user))
             return { "success": True, "message": "successfully modified" }, 200
 
             return f(*args, **kwargs)

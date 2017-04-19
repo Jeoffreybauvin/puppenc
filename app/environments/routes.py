@@ -48,7 +48,7 @@ class Environments(PuppencResource):
             curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/environments/1
         """
         if not id:
-            return self.environments_schema.jsonify(g.obj_info)
+            return make_response(self.environments_schema.jsonify(g.obj_info), 200)
         else:
             return self.environment_schema.jsonify(g.obj_info)
 
@@ -74,8 +74,6 @@ class Environments(PuppencResource):
 
     @auth.login_required
     @body_is_valid
-    @is_unique_item(Environment)
-    @get_item(Environment)
     @edit_item(Environment)
     def put(self, id=None):
         """

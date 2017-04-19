@@ -5,4 +5,4 @@ class HostgroupSchema(ma.ModelSchema):
     class Meta:
         model = Hostgroup
         # Fields to expose
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'insert_date', 'update_date', 'class_id')
