@@ -78,6 +78,26 @@ class Hostgroups(PuppencResource):
             'name': obj.name,
         }})
 
+    @auth.login_required
+    @edit_item(Hostgroup)
+    def put(self, id):
+        """
+        @api {put} /hostgroups/:id Edit an hostgroup
+        @apiVersion 1.0.0
+        @apiName put_hostgroup
+        @apiGroup Hostgroups
+        @apiPermission user
+        @apiParam {Number}    id              The hostgroup's id.
+        @apiParam {String}    name            The hostgroup's name.
+        @apiParam {Number}    class_id        The hostgroup's class_id.
+        @apiSuccess {Boolean}   success         Success (True if ok).
+        @apiSuccess {String}    message         A success or error message.
+        @apiExample {curl} Example usage :
+            curl -X PUT -H "Content-Type: application/json" \
+            -d '{ "name": "my_new_hostgroup" }' \
+            http://127.0.0.1:5000/api/v1/hostgroups/1
+        """
+        pass
 
     @auth.login_required
     @get_item(Hostgroup)
