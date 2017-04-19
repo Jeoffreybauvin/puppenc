@@ -27,7 +27,7 @@ def body_is_valid(func):
             return { "success": False, "message": "No body given" }, 500
         else:
             try:
-                content = request.get_json()
+                content = request.get_json(force=True)
             except:
                 return { "success": False, "message": "Invalid json syntax" }, 500
         return func(*args, **kwargs)
@@ -41,7 +41,7 @@ def is_unique_item(Type):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
             # Check if the item already exists
-            content = request.get_json(silent=True)
+            content = request.get_json(force=True, silent=True)
             if not 'name' in content:
                 return { "success": False, "message": u"'name' parameter is mandatory for this %s" % type }, 500
 
