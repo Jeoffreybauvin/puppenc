@@ -52,7 +52,7 @@ class Hostgroups(PuppencResource):
     @auth.login_required
     @is_unique_item(Hostgroup)
     @body_is_valid
-    @post_item(Hostgroup)
+    # @post_item(Hostgroup)
     def post(self, id=None):
         """
         @api {post} /hostgroups Add a new hostgroup
@@ -63,7 +63,20 @@ class Hostgroups(PuppencResource):
         @apiParam   {String}    name            The hostgroup's name.
         @apiSuccess {Number}    id              The hostgroup's id.
         """
-        pass
+        content = request.get_json(silent=True)
+        if not 'class_id' in content:
+            class_id = None
+        else:
+            class_id = content['class_id']
+
+        obj = Hostgroup(g.obj_name, class_id=class_id)
+        db.session.add(obj)
+        db.session.commit()
+        app.logger.info(u"Create Hostgroup %s %s by %s" % (Hostgroup, g.obj_name, g.user))
+        return jsonify({obj.id: {
+            'name': obj.name,
+        }})
+
 
     @auth.login_required
     @get_item(Hostgroup)
