@@ -45,14 +45,14 @@ class Hostgroups(PuppencResource):
         @apiSuccess {Datetime}  delete_date     The hostgroup's deleted date
         """
         if not id:
-            return self.hostgroups_schema.jsonify(g.obj_info)
+            return make_response(self.hostgroups_schema.jsonify(g.obj_info), 200)
         else:
             return self.hostgroup_schema.jsonify(g.obj_info)
 
     @auth.login_required
     @is_unique_item(Hostgroup)
     @body_is_valid
-    @post_item(Hostgroup)
+    # @post_item(Hostgroup)
     def post(self, id=None):
         """
         @api {post} /hostgroups Add a new hostgroup
@@ -63,7 +63,39 @@ class Hostgroups(PuppencResource):
         @apiParam   {String}    name            The hostgroup's name.
         @apiSuccess {Number}    id              The hostgroup's id.
         """
+        content = request.get_json(silent=True)
+        if not 'class_id' in content:
+            class_id = None
+        else:
+            class_id = content['class_id']
+
+        obj = Hostgroup(g.obj_name, class_id=class_id)
+        db.session.add(obj)
+        db.session.commit()
+        app.logger.info(u"Create Item %s %s by %s" % (Hostgroup, g.obj_name, g.user))
+        return jsonify({obj.id: {
+            'name': obj.name,
+        }})
+
+    @auth.login_required
+    @body_is_valid
+    @edit_item(Hostgroup)
+    def put(self, id=None):
+        """
+        @api {put} /hostgroups/:id Edit an existing hostgroup
+        @apiVersion 1.0.0
+        @apiName edit_hostgroup
+        @apiPermission user
+        @apiGroup Hostgroups
+        @apiSuccess {Number}    success         True if success
+        @apiSuccess {Number}    message         A information message
+        @apiExample {curl} Example usage :
+            curl -X PUT -H "Content-Type: application/json" \
+            -d '{ "name": "my_hg" }' \
+            http://127.0.0.1:5000/api/v1/hostgroups/:id
+        """
         pass
+
 
     @auth.login_required
     @get_item(Hostgroup)
