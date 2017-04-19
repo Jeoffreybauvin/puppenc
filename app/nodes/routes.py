@@ -45,7 +45,7 @@ class Nodes(Resource):
         @apiSuccess {Datetime}  delete_date     The node's deleted date
         """
         if not id:
-            return self.nodes_schema.jsonify(g.obj_info)
+            return make_response(self.nodes_schema.jsonify(g.obj_info), 200)
         else:
             return self.node_schema.jsonify(g.obj_info)
 
@@ -89,6 +89,8 @@ class Nodes(Resource):
 
 
     @auth.login_required
+    @body_is_valid
+    @edit_item(Node)
     def put(self, id):
         """
         @api {put} /nodes/:id Edit a node
@@ -107,25 +109,7 @@ class Nodes(Resource):
             -d '{ "name": "my_new_server" }' \
             http://127.0.0.1:5000/api/v1/nodes/1
         """
-        node = Node.query.filter_by(id=id).first()
-        if not node:
-            return { "success": False, "message": "Node not found" }, 304
-        else:
-            Node.query.filter_by(id=id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
-
-            content = request.get_json(silent=True)
-            if 'name' in content:
-                Node.query.filter_by(id=id).update({ "name": content['name'] }, synchronize_session=False)
-
-            if 'environment_id' in content:
-                Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
-
-            if 'hostgroup_id' in content:
-                Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
-
-
-            db.session.commit()
-            return { "success": True, "message": "Node successfully modified" }, 200
+        pass
 
     @auth.login_required
     @get_item(Node)
