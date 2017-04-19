@@ -57,14 +57,18 @@ def get_item(Type):
     def wrapper(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
-            nb_limit = int(request.args.get('_perPage', app.config['OBJECTS_PER_PAGE']))
-            cur_page = int(request.args.get('_page', 1))
-            sort_dir = str(request.args.get('_sortDir', 'asc'))
+            nb_limit   = int(request.args.get('_perPage', app.config['OBJECTS_PER_PAGE']))
+            cur_page   = int(request.args.get('_page', 1))
+            filters    = str(request.args.get('_filters', 1))
+            sort_dir   = str(request.args.get('_sortDir', 'asc'))
             sort_field = str(request.args.get('_sortField', 'id'))
+            filter     = str(request.args.get('filter', ''))
 
-            filter = str(request.args.get('filter', ''))
             obj_id = kwargs.get('id')
             sort = sort_field + " " + sort_dir
+
+
+
             if filter:
                 obj = Type.query.filter(Type.name.like(filter)).all()
             else:
