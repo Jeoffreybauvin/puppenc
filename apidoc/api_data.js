@@ -736,6 +736,13 @@ define({ "api": [
             "optional": false,
             "field": "name",
             "description": "<p>The hostgroup's name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "class_id",
+            "description": "<p>The related class id.</p>"
           }
         ]
       }

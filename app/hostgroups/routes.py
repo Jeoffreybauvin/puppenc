@@ -61,6 +61,7 @@ class Hostgroups(PuppencResource):
         @apiPermission user
         @apiGroup Hostgroups
         @apiParam   {String}    name            The hostgroup's name.
+        @apiParam   {Number}    class_id        The related class id.
         @apiSuccess {Number}    id              The hostgroup's id.
         """
         content = request.get_json(silent=True)
