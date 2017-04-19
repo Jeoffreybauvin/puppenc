@@ -49,7 +49,7 @@ class Classes(PuppencResource):
             curl -X GET http://127.0.0.1:5000/api/v1/classes/:id
         """
         if not id:
-            return self.classes_schema.jsonify(g.obj_info)
+            return make_response(self.classes_schema.jsonify(g.obj_info), 200)
         else:
             return self.class_schema.jsonify(g.obj_info)
 
@@ -75,8 +75,6 @@ class Classes(PuppencResource):
 
     @auth.login_required
     @body_is_valid
-    @is_unique_item(Class)
-    @get_item(Class)
     @edit_item(Class)
     def put(self, id=None):
         """
