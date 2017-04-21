@@ -6,7 +6,7 @@ from app.users.models import User
 @auth.verify_password
 def verify_password(name_or_token, password):
     if not app.config['ENABLE_AUTH']:
-        g.user = None
+        g.user = False
         return True
     # first try to authenticate by token
     user = User.verify_auth_token(name_or_token)
