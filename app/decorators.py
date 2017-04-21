@@ -136,7 +136,7 @@ def delete_item(Type):
             response = f(*args, **kwargs)
             db.session.delete(g.obj_info)
             db.session.commit()
-            app.logger.info(u"Delete Item %s by %s" % g.obj_info, g.user)
+            app.logger.info(u"Delete Item %s by %s" % (g.obj_info, g.user))
             return { "success": True, "message": u"%s deleted" % g.obj_info }, 200
         return func_wrapper
     return wrapper
