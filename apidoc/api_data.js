@@ -1406,9 +1406,10 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "Number",
-            "optional": false,
+            "optional": true,
             "field": "duration",
-            "description": "<p>Pass a custom duration (seconds)</p>"
+            "defaultValue": "600",
+            "description": "<p>(query parameter) Use a custom token duration</p>"
           }
         ]
       }

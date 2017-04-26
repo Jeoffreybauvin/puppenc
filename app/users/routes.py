@@ -71,7 +71,7 @@ class Tokens(PuppencResource):
     @apiVersion 1.0.0
     @apiPermission user
     @apiSuccess {String}    token              The token
-    @apiParam   {Number}    duration           Pass a custom duration (seconds)
+    @apiParam   {Number}    [duration=600]     (query parameter) Use a custom token duration
     @apiSuccess {Number}    duration           The token's validity
     @apiExample {curl} Example usage :
         curl -X GET -H "Content-Type: application/json" \
