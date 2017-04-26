@@ -6,7 +6,7 @@ from app.users.models import User
 @auth.verify_password
 def verify_password(name_or_token, password):
     if not app.config['ENABLE_AUTH']:
-        g.user = None
+        g.user = False
         return True
     # first try to authenticate by token
     user = User.verify_auth_token(name_or_token)
@@ -136,7 +136,7 @@ def delete_item(Type):
             response = f(*args, **kwargs)
             db.session.delete(g.obj_info)
             db.session.commit()
-            app.logger.info(u"Delete Item %s by %s" % g.obj_info, g.user)
+            app.logger.info(u"Delete Item %s by %s" % (g.obj_info, g.user))
             return { "success": True, "message": u"%s deleted" % g.obj_info }, 200
         return func_wrapper
     return wrapper

@@ -1,22 +1,21 @@
 ---
 version: '2'
 services:
-  puppenc-api:
+  puppenc-api-tests:
     image: puppenc/api:latest
     restart: always
     ports:
-      - "5000:5000"
-      - "5001:5001"
+      - "5005:5000"
     volumes:
-      -  $PWD:/puppenc
+      -  $PWD/../:/puppenc
     links:
-      - puppenc-mysql
+      - puppenc-mysql-tests
     entrypoint:
       - python
       - run.py
     environment:
-      PUPPENC_SETTINGS: 'config.py'      
-  puppenc-mysql:
+      PUPPENC_SETTINGS: 'tests/config.py'
+  puppenc-mysql-tests:
     image: mysql:5.6
     ports:
       - "3306"

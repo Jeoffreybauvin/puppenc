@@ -27,6 +27,7 @@ app.config.update(dict(
     DB_PASSWORD = 'puppenc',
 ))
 app.config.from_object('config')
+app.config.from_envvar('PUPPENC_SETTINGS', silent=True)
 
 app.config.update(dict(SQLALCHEMY_DATABASE_CONN = 'mysql://' + app.config['DB_USER'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_HOST']))
 app.config.update(dict(SQLALCHEMY_DATABASE_URI = app.config['SQLALCHEMY_DATABASE_CONN'] + '/' + app.config['DB_NAME']))

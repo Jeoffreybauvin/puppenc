@@ -1370,7 +1370,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/tokens/<id>",
+    "url": "/tokens",
     "title": "Get a token",
     "name": "get_token",
     "group": "Tokens",

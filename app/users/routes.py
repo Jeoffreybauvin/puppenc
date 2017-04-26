@@ -65,7 +65,7 @@ class Tokens(PuppencResource):
         self.users_schema = UserSchema(many=True)
 
     """
-    @api {get} /tokens/<id> Get a token
+    @api {get} /tokens Get a token
     @apiName get_token
     @apiGroup Tokens
     @apiVersion 1.0.0
