@@ -66,7 +66,8 @@ def get_item(Type):
             obj_id = kwargs.get('id')
 
             if filter:
-                obj = Type.query.filter(Type.name.like(filter)).all()
+                my_filter = filter.replace('*', '%')
+                obj = Type.query.filter(Type.name.like(my_filter)).all()
             else:
                 if obj_id:
                     obj = Type.query.filter_by(id=int(obj_id)).first()

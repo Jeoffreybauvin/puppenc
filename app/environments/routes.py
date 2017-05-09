@@ -23,7 +23,7 @@ class Environments(PuppencResource):
         @apiPermission user
         @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display
         @apiParam   {String}    [page=1]        (query parameter) Current page
-        @apiParam   {String}    [filter]        (query parameter) Filter on name parameter : same syntax from LIKE MySQL : %variable%
+        @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *maclass*)
         @apiSuccess {Number}    id              The environment's id
         @apiSuccess {String}    name            The environment's name
         @apiSuccess {Datetime}  insert_date     The environment's inserted date
