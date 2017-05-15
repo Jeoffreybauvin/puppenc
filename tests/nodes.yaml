@@ -131,7 +131,7 @@
   - method: "PUT"
   - body: '{"hostgroup_id": 999}'
   - headers: {'Content-Type': 'application/json'}
-  - expected_status: [200]
+  - expected_status: [301]
   - validators:
       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 
@@ -175,7 +175,7 @@
   - method: "PUT"
   - body: '{"environment_id": 999}'
   - headers: {'Content-Type': 'application/json'}
-  - expected_status: [200]
+  - expected_status: [301]
   - validators:
       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 

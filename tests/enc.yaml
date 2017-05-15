@@ -16,4 +16,4 @@
     - group: "ENC"
     - name: "Check my ENC  (no server found)"
     - url: "/api/v1/enc/my_server"
-    - expected_status: [404]
+    - expected_status: [200]
