@@ -14,7 +14,7 @@ class Environment(db.Model):
 
     envR = db.relationship('Node', backref='env_info', lazy='dynamic')
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def __repr__(self):

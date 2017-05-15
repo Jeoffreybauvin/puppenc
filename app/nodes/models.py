@@ -12,7 +12,7 @@ class Node(db.Model):
     environment_id = db.Column(db.Integer, db.ForeignKey('environments.id'))
     active         = db.Column(db.Integer, default=1)
 
-    def __init__(self, name, environment_id, hostgroup_id):
+    def __init__(self, name=None, environment_id=None, hostgroup_id=None):
         self.name = name
         self.environment_id = environment_id
         self.hostgroup_id = hostgroup_id

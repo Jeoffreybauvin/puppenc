@@ -14,7 +14,7 @@ class Hostgroup(db.Model):
 
     nodesR = db.relationship('Node', backref='hostgroup_info', lazy='dynamic')
 
-    def __init__(self, name, class_id):
+    def __init__(self, name=None, class_id=None):
         self.name = name
         self.class_id = class_id
 

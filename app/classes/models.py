@@ -11,7 +11,7 @@ class Class(db.Model):
 
     hostgroupR = db.relationship('Hostgroup', backref='class_info', lazy='dynamic')
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def __repr__(self):
