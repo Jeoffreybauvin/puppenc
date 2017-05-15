@@ -1,6 +1,7 @@
 ---
 - config:
   - testset: "Puppenc tests"
+  - timeout: 2
 
 - test:
   - group: "Start"

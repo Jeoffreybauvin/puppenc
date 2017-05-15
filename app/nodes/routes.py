@@ -1,6 +1,8 @@
 from flask_restful import Resource
 from flask import jsonify, request, g
 
+from sqlalchemy import exc
+
 from app.puppenc import api, db, app, auth, PuppencResource
 from app.decorators import *
 
@@ -118,10 +120,17 @@ class Nodes(Resource):
                 Node.query.filter_by(id=id).update({ "name": content['name'] }, synchronize_session=False)
 
             if 'environment_id' in content:
-                Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
+                try:
+                    Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
+                except exc.SQLAlchemyError:
+                    return { "success": False, "message": "Environment not found" }, 301
 
             if 'hostgroup_id' in content:
-                Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
+                try:
+                    Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
+                except exc.SQLAlchemyError:
+                    app.logger.info(u"Cannot edit node %s : hostgroup %s not found" % (id, content['hostgroup_id']))
+                    return { "success": False, "message": "Hostgroup not found" }, 301
 
 
             db.session.commit()
