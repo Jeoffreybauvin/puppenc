@@ -1,0 +1,84 @@
+
+ #  ______ _   ___      _______ _____   ____  _   _ __  __ ______ _   _ _______ _____
+ # |  ____| \ | \ \    / /_   _|  __ \ / __ \| \ | |  \/  |  ____| \ | |__   __/ ____|
+ # | |__  |  \| |\ \  / /  | | | |__) | |  | |  \| | \  / | |__  |  \| |  | | | (___
+ # |  __| | . ` | \ \/ /   | | |  _  /| |  | | . ` | |\/| |  __| | . ` |  | |  \___ \
+ # | |____| |\  |  \  /   _| |_| | \ \| |__| | |\  | |  | | |____| |\  |  | |  ____) |
+ # |______|_| \_|   \/   |_____|_|  \_\\____/|_| \_|_|  |_|______|_| \_|  |_| |_____/
+ #
+
+- test:
+  - group: "Environments"
+  - name: "Check if my environment is not here"
+  - url: "/api/v1/environments/1"
+  - expected_status: [404]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Environments"
+  - name: "Create an environment"
+  - url: "/api/v1/environments"
+  - method: "POST"
+  - body: '{"name": "my_test_environment"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+    - group: "Environments"
+    - name: "Check my env"
+    - url: "/api/v1/environments/1"
+    - expected_status: [200]
+    - validators:
+        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_test_environment"}
+
+- test:
+    - group: "Environments"
+    - name: "Edit an environment"
+    - url: "/api/v1/environments/1"
+    - method: "PUT"
+    - body: '{"name": "my_new_env"}'
+    - headers: {'Content-Type': 'application/json'}
+    - expected_status: [200]
+
+- test:
+    - group: "Environments"
+    - name: "Check my env"
+    - url: "/api/v1/environments/1"
+    - expected_status: [200]
+    - validators:
+        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_env"}
+
+- test:
+    - group: "Environments"
+    - name: "Delete my env"
+    - url: "/api/v1/environments/1"
+    - method: 'DELETE'
+    - expected_status: [200]
+    - validators:
+        - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+    - group: "Environments"
+    - name: "Check my env after delete"
+    - url: "/api/v1/environments/1"
+    - expected_status: [404]
+    - validators:
+        - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Environments"
+  - name: "Create an environment"
+  - url: "/api/v1/environments"
+  - method: "POST"
+  - body: '{"name": "my_new_env"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+    - group: "Environments"
+    - name: "Check my env"
+    - url: "/api/v1/environments/2"
+    - expected_status: [200]
+    - validators:
+        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_env"}

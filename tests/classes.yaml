@@ -1,0 +1,83 @@
+#    _____ _                _____ _____ ______  _____
+#  / ____| |        /\    / ____/ ____|  ____|/ ____|
+# | |    | |       /  \  | (___| (___ | |__  | (___
+# | |    | |      / /\ \  \___ \\___ \|  __|  \___ \
+# | |____| |____ / ____ \ ____) |___) | |____ ____) |
+#  \_____|______/_/    \_\_____/_____/|______|_____/
+#
+
+- test:
+  - group: "Classes"
+  - name: "Check if my class is not here"
+  - url: "/api/v1/classes/1"
+  - expected_status: [404]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Classes"
+  - name: "Create a class"
+  - url: "/api/v1/classes"
+  - method: "POST"
+  - body: '{"name": "role::my_test_class"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+   - group: "Classes"
+   - name: "Check my class"
+   - url: "/api/v1/classes/1"
+   - expected_status: [200]
+   - validators:
+       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_test_class"}
+
+- test:
+   - group: "Classes"
+   - name: "Edit a class"
+   - url: "/api/v1/classes/1"
+   - method: "PUT"
+   - body: '{"name": "role::my_new_test_class"}'
+   - headers: {'Content-Type': 'application/json'}
+   - expected_status: [200]
+
+- test:
+   - group: "Classes"
+   - name: "Check my class"
+   - url: "/api/v1/classes/1"
+   - expected_status: [200]
+   - validators:
+       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_new_test_class"}
+
+- test:
+   - group: "Classes"
+   - name: "Delete my class"
+   - url: "/api/v1/classes/1"
+   - method: 'DELETE'
+   - expected_status: [200]
+   - validators:
+       - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+   - group: "Classes"
+   - name: "Check my class after delete"
+   - url: "/api/v1/classes/1"
+   - expected_status: [404]
+   - validators:
+       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Classes"
+  - name: "Recreate a class"
+  - url: "/api/v1/classes"
+  - method: "POST"
+  - body: '{"name": "role::my_second_test_class"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+   - group: "Classes"
+   - name: "Check my class"
+   - url: "/api/v1/classes/2"
+   - expected_status: [200]
+   - validators:
+       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_second_test_class"}
