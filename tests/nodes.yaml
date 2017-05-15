@@ -1,0 +1,191 @@
+#  _   _  ____  _____  ______  _____
+# | \ | |/ __ \|  __ \|  ____|/ ____|
+# |  \| | |  | | |  | | |__  | (___
+# | . ` | |  | | |  | |  __|  \___ \
+# | |\  | |__| | |__| | |____ ____) |
+# |_| \_|\____/|_____/|______|_____/
+#
+
+- test:
+  - group: "Nodes"
+  - name: "Check if my node is not here"
+  - url: "/api/v1/nodes/1"
+  - expected_status: [404]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Nodes"
+  - name: "Create a node"
+  - url: "/api/v1/nodes"
+  - method: "POST"
+  - body: '{"name": "my_node"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node"
+  - url: "/api/v1/nodes/1"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_node"}
+
+- test:
+  - group: "Nodes"
+  - name: "Edit a node"
+  - url: "/api/v1/nodes/1"
+  - method: "PUT"
+  - body: '{"name": "my_new_node"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node"
+  - url: "/api/v1/nodes/1"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_node"}
+
+- test:
+  - group: "Nodes"
+  - name: "Delete my node"
+  - url: "/api/v1/nodes/1"
+  - method: 'DELETE'
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after delete"
+  - url: "/api/v1/nodes/1"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 0}
+
+- test:
+  - group: "Nodes"
+  - name: "Delete my node a 2nd time"
+  - url: "/api/v1/nodes/1"
+  - method: 'DELETE'
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after delete a 2nd time"
+  - url: "/api/v1/nodes/1"
+  - expected_status: [404]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Nodes"
+  - name: "Recreate a node"
+  - url: "/api/v1/nodes"
+  - method: "POST"
+  - body: '{"name": "my_second_node"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node"
+  - url: "/api/v1/nodes/2"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
+      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: null}
+
+- test:
+  - group: "Nodes"
+  - name: "Set an hostgroup for my node"
+  - url: "/api/v1/nodes/2"
+  - method: "PUT"
+  - body: '{"hostgroup_id": 2}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after setting a hostgroup"
+  - url: "/api/v1/nodes/2"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
+      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+
+- test:
+  - group: "Nodes"
+  - name: "Set an absent hostgroup for my node"
+  - url: "/api/v1/nodes/2"
+  - method: "PUT"
+  - body: '{"hostgroup_id": 999}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after setting a hostgroup"
+  - url: "/api/v1/nodes/2"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
+      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+
+- test:
+  - group: "Nodes"
+  - name: "Set an environment for my node"
+  - url: "/api/v1/nodes/2"
+  - method: "PUT"
+  - body: '{"environment_id": 2}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after setting a environment"
+  - url: "/api/v1/nodes/2"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
+      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+
+- test:
+  - group: "Nodes"
+  - name: "Set an absent environment for my node"
+  - url: "/api/v1/nodes/2"
+  - method: "PUT"
+  - body: '{"environment_id": 999}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+
+- test:
+  - group: "Nodes"
+  - name: "Check my node after setting an environment"
+  - url: "/api/v1/nodes/2"
+  - expected_status: [200]
+  - validators:
+      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
+      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
+      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}

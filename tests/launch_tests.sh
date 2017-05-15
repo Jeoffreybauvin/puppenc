@@ -14,5 +14,5 @@ else
   url=$1
 fi
 
-docker-compose exec puppenc-api-tests resttest.py --url=${url} tests/tests.yaml
+docker-compose exec puppenc-api-tests resttest.py --url=${url} tests/tests.yaml --log info
 docker-compose down

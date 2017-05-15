@@ -1,0 +1,19 @@
+  #  ______ _   _  _____
+  # |  ____| \ | |/ ____|
+  # | |__  |  \| | |
+  # |  __| | . ` | |
+  # | |____| |\  | |____
+  # |______|_| \_|\_____|
+  #
+
+- test:
+    - group: "ENC"
+    - name: "Check my ENC"
+    - url: "/api/v1/enc/my_second_node"
+    - expected_status: [200]
+
+- test:
+    - group: "ENC"
+    - name: "Check my ENC  (no server found)"
+    - url: "/api/v1/enc/my_server"
+    - expected_status: [404]
