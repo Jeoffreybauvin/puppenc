@@ -14,5 +14,6 @@
 - import: tests/environments.yaml
 - import: tests/classes.yaml
 - import: tests/hostgroups.yaml
+- import: tests/variables.yaml
 - import: tests/nodes.yaml
 - import: tests/enc.yaml

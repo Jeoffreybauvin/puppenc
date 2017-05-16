@@ -71,7 +71,7 @@
   - name: "Recreate a hostgroup"
   - url: "/api/v1/hostgroups"
   - method: "POST"
-  - body: '{"name": "my_second_hostgroup"}'
+  - body: '{"name": "my_second_hostgroup", "class_id": 2}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
 
@@ -82,3 +82,4 @@
     - expected_status: [200]
     - validators:
         - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_hostgroup"}
+        - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}
