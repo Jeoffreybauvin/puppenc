@@ -83,16 +83,19 @@ class PuppencResource(Resource):
 from app.environments.routes import Environments
 from app.hostgroups.routes import Hostgroups
 from app.classes.routes import Classes
-from app.nodes.routes import Nodes
-
+from app.variables.routes import Variables
 from app.users.routes import Users, Tokens
 from app.enc.routes import Enc
+from app.nodes.routes import Nodes
+from app.nodes.routes_variables import NodesVariables
 
 # Let's expose something :)
 api.add_resource(Nodes, '/nodes', '/nodes/<int:id>')
+api.add_resource(NodesVariables, '/nodes/<int:id>/variables')
 api.add_resource(Hostgroups, '/hostgroups', '/hostgroups/<int:id>')
 api.add_resource(Environments, '/environments', '/environments/<int:id>')
 api.add_resource(Classes, '/classes', '/classes/<int:id>')
+api.add_resource(Variables, '/variables', '/variables/<int:id>')
 api.add_resource(Enc, '/enc/<string:node_name>')
 api.add_resource(Users, '/users', '/users/<int:id>')
 api.add_resource(Tokens, '/tokens')

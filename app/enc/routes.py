@@ -7,6 +7,7 @@ from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
 from app.environments.models import Environment
 from app.classes.models import Class
+from app.variables.models import Variable
 
 class Enc(PuppencResource):
     @auth.login_required
@@ -78,9 +79,19 @@ class Enc(PuppencResource):
                 else:
                     class_name = data.class_name
 
+                # Parameters now
+                params = { "parameters": []}
+                for p in node.nodes_var:
+                    # params[p.name].append(p.content)
+                    params.append(p.content)
+
+
+                # app.logger.info(params)
 
                 hostgroup_name = data.hostgroup_name
                 environment_name = data.environment_name
+
+                # Todo : get variables
 
                 app.logger.info('Get ENC on %s, by %s', node_name, g.user)
                 # We need to display it on "ENC" format
@@ -98,4 +109,4 @@ class Enc(PuppencResource):
                 if output == 'json':
                     return jsonify(res, 200)
                 else:
-                    return output_yaml(res, 200)
+                    return output_yaml(params, 200)
