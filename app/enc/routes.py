@@ -90,7 +90,8 @@ class Enc(PuppencResource):
                 params['parameters']['hostgroup'] = hostgroup_name
 
                 for p in node.nodes_var:
-                    params['parameters'][p.name] = p.content
+                    content = p.content
+                    params['parameters'][p.name] = content
 
                 app.logger.info('Get ENC on %s, by %s', node_name, g.user)
                 # We need to display it on "ENC" format
