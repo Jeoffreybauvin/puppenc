@@ -337,10 +337,10 @@
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "output",
             "defaultValue": "yaml",
-            "description": "<p>(query parameter) Output result. Example : json</p>"
+            "description": "<p>(query parameter) Output result. Avaiable methods : yaml / json</p>"
           }
         ]
       }
@@ -348,13 +348,6 @@
     "success": {
       "fields": {
         "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>The hostgroup's id.</p>"
-          },
           {
             "group": "Success 200",
             "type": "String",
@@ -1083,6 +1076,61 @@
     "groupTitle": "Nodes"
   },
   {
+    "type": "post",
+    "url": "/nodes/:id/variables",
+    "title": "Assign an existing variable to a node",
+    "version": "1.0.0",
+    "name": "add_variable_to_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "group": "Nodes",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "variable_id",
+            "description": "<p>The variable's id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"variable_id\": 1 }' \\\nhttp://127.0.0.1:5000/api/v1/nodes/2/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/nodes/routes_variables.py",
+    "groupTitle": "Nodes"
+  },
+  {
     "type": "get",
     "url": "/nodes/:id",
     "title": "Get a single node",
@@ -1369,6 +1417,61 @@
     "groupTitle": "Nodes"
   },
   {
+    "type": "delete",
+    "url": "/nodes/:id/variables",
+    "title": "Unassign an existing variable to a node",
+    "version": "1.0.0",
+    "name": "rm_variable_to_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "group": "Nodes",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "variable_id",
+            "description": "<p>The variable's id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X DELETE -H \"Content-Type: application/json\" \\\n-d '{ \"variable_id\": 1 }' \\\nhttp://127.0.0.1:5000/api/v1/nodes/2/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/nodes/routes_variables.py",
+    "groupTitle": "Nodes"
+  },
+  {
     "type": "get",
     "url": "/tokens",
     "title": "Get a token",
@@ -1543,6 +1646,13 @@
             "optional": false,
             "field": "name",
             "description": "<p>The variable's name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>The variable's content : you can use json here to specify arrays.</p>"
           }
         ]
       }
@@ -1567,8 +1677,13 @@
     },
     "examples": [
       {
-        "title": "Example usage :",
-        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"role::my_variable\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables",
+        "title": "Simple string",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_variable\", \"content\": \"my_content\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables",
+        "type": "curl"
+      },
+      {
+        "title": "JSON",
+        "content": "curl -i -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"array\", \"content\":\"{\\\"ntp_servers\\\": [ \\\"ntp1\\\", \\\"ntp2\\\" ] }\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables",
         "type": "curl"
       }
     ],
