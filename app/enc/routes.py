@@ -79,34 +79,32 @@ class Enc(PuppencResource):
                 else:
                     class_name = data.class_name
 
-                # Parameters now
-                params = { "parameters": []}
-                for p in node.nodes_var:
-                    # params[p.name].append(p.content)
-                    params.append(p.content)
-
-
-                # app.logger.info(params)
-
                 hostgroup_name = data.hostgroup_name
                 environment_name = data.environment_name
 
-                # Todo : get variables
+                # Parameters now
+                params = {}
+                params['parameters'] = {}
+                # legacy
+                params['parameters']['puppetmaster'] = ''
+                params['parameters']['hostgroup'] = hostgroup_name
+
+                for p in node.nodes_var:
+                    params['parameters'][p.name] = p.content
 
                 app.logger.info('Get ENC on %s, by %s', node_name, g.user)
                 # We need to display it on "ENC" format
-                res = {
+                base = {
                     'classes': [
                         class_name,
                     ],
-                    'parameters': {
-                        'puppetmaster': '',
-                        'hostgroup': hostgroup_name
-                    },
                     'environment': environment_name
                 }
+
+                res = base.copy()
+                res.update(params)
 
                 if output == 'json':
                     return jsonify(res, 200)
                 else:
-                    return output_yaml(params, 200)
+                    return output_yaml(res, 200)
