@@ -20,6 +20,7 @@ class NodesVariables(Resource):
         @apiVersion 1.0.0
         @apiName add_variable_to_node
         @apiPermission user
+        @apiDescription The variable need to be created before.
         @apiGroup Nodes
         @apiParam   {Number}    id            The node's id
         @apiParam   {Number}    variable_id   The variable's id

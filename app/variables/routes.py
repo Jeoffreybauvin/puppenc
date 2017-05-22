@@ -63,6 +63,7 @@ class Variables(PuppencResource):
         @apiVersion 1.0.0
         @apiName add_variable
         @apiGroup Variables
+        @apiDescription Strings named true or false are automatically converted to Booleans. Strings in json format are automatically converted to objects.
         @apiParam   {String}    name            The variable's name.
         @apiParam   {String}    content         The variable's content : you can use json here to specify arrays.
         @apiPermission user
@@ -106,7 +107,7 @@ class Variables(PuppencResource):
         @apiSuccess {Number}    message         A information message
         @apiExample {curl} Example usage :
             curl -X PUT -H "Content-Type: application/json" \
-            -d '{ "name": "role::my_variable" }' \
+            -d '{ "name": "my_new_name" }' \
             http://127.0.0.1:5000/api/v1/variables/:id
         """
         pass
