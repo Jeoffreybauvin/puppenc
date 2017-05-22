@@ -55,7 +55,7 @@ class Variables(PuppencResource):
 
     @auth.login_required
     @body_is_valid
-    @is_unique_item(Variable)
+    # @is_unique_item(Variable)
     # @post_item(Variable)
     def post(self, id=None):
         """
@@ -83,12 +83,14 @@ class Variables(PuppencResource):
         else:
             content = data['content']
 
-        obj = Variable(g.obj_name, content=content)
+        name = data['name']
+
+        obj = Variable(name, content=content)
         db.session.add(obj)
         db.session.commit()
-        app.logger.info(u"Create Item %s %s by %s" % (Variable, g.obj_name, g.user))
+        app.logger.info(u"Create Item %s %s by %s" % (Variable, name, g.user))
         return jsonify({obj.id: {
-            'name': obj.name,
+            'name': name,
         }})
 
     @auth.login_required
