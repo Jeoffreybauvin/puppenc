@@ -2,6 +2,7 @@ from flask_restful import Resource
 from flask import jsonify, request, g
 
 from app.puppenc import app, api, db, output_yaml, auth, PuppencResource
+import json
 
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
@@ -90,7 +91,19 @@ class Enc(PuppencResource):
                 params['parameters']['hostgroup'] = hostgroup_name
 
                 for p in node.nodes_var:
-                    content = p.content
+                    if p.content == 'true':
+                        content = True
+                    elif p.content == 'false':
+                        content = False
+                    else:
+                        if p.content[0] == '{':
+                            try:
+                                content = json.loads(p.content)
+                            except:
+                                app.logger.info('unable to format json')
+                        else:
+                            content = p.content
+
                     params['parameters'][p.name] = content
 
                 app.logger.info('Get ENC on %s, by %s', node_name, g.user)
