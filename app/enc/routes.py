@@ -101,6 +101,7 @@ class Enc(PuppencResource):
                                 content = json.loads(p.content)
                             except:
                                 app.logger.info('unable to format json')
+                                content = p.content
                         else:
                             content = p.content
 
