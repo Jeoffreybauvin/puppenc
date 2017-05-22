@@ -75,7 +75,7 @@ def get_item(Type):
                     obj = Type.query.paginate(cur_page, nb_limit).items
 
             if obj is None:
-                return { "success": False, "message": u"%s not found" % type  }, 404
+                return { "success": False, "message": u"%s (id %s) not found" % (Type, obj_id)  }, 404
 
             g.obj_info = obj
             app.logger.info(u"%s %s, %s by %s" % (request.method, Type, g.obj_info, g.user))

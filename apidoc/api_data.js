@@ -337,10 +337,10 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "output",
             "defaultValue": "yaml",
-            "description": "<p>(query parameter) Output result. Example : json</p>"
+            "description": "<p>(query parameter) Output result. Avaiable methods : yaml / json</p>"
           }
         ]
       }
@@ -348,13 +348,6 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>The hostgroup's id.</p>"
-          },
           {
             "group": "Success 200",
             "type": "String",
@@ -1083,6 +1076,62 @@ define({ "api": [
     "groupTitle": "Nodes"
   },
   {
+    "type": "post",
+    "url": "/nodes/:id/variables",
+    "title": "Assign an existing variable to a node",
+    "version": "1.0.0",
+    "name": "add_variable_to_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "description": "<p>The variable need to be created before.</p>",
+    "group": "Nodes",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "variable_id",
+            "description": "<p>The variable's id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"variable_id\": 1 }' \\\nhttp://127.0.0.1:5000/api/v1/nodes/2/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/nodes/routes_variables.py",
+    "groupTitle": "Nodes"
+  },
+  {
     "type": "get",
     "url": "/nodes/:id",
     "title": "Get a single node",
@@ -1369,6 +1418,61 @@ define({ "api": [
     "groupTitle": "Nodes"
   },
   {
+    "type": "delete",
+    "url": "/nodes/:id/variables",
+    "title": "Unassign an existing variable to a node",
+    "version": "1.0.0",
+    "name": "rm_variable_to_node",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "group": "Nodes",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "variable_id",
+            "description": "<p>The variable's id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The node's id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X DELETE -H \"Content-Type: application/json\" \\\n-d '{ \"variable_id\": 1 }' \\\nhttp://127.0.0.1:5000/api/v1/nodes/2/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/nodes/routes_variables.py",
+    "groupTitle": "Nodes"
+  },
+  {
     "type": "get",
     "url": "/tokens",
     "title": "Get a token",
@@ -1526,5 +1630,331 @@ define({ "api": [
     ],
     "filename": "app/users/routes.py",
     "groupTitle": "Users"
+  },
+  {
+    "type": "post",
+    "url": "/variables",
+    "title": "Add a new variable",
+    "version": "1.0.0",
+    "name": "add_variable",
+    "group": "Variables",
+    "description": "<p>Strings named true or false are automatically converted to Booleans. Strings in json format are automatically converted to objects.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The variable's name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>The variable's content : you can use json here to specify arrays.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The variable's id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Simple string",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_variable\", \"content\": \"my_content\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables",
+        "type": "curl"
+      },
+      {
+        "title": "JSON",
+        "content": "curl -i -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"array\", \"content\":\"{\\\"ntp_servers\\\": [ \\\"ntp1\\\", \\\"ntp2\\\" ] }\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/variables/routes.py",
+    "groupTitle": "Variables"
+  },
+  {
+    "type": "put",
+    "url": "/variables/:id",
+    "title": "Edit an existing variable",
+    "version": "1.0.0",
+    "name": "edit_variable",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "group": "Variables",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "success",
+            "description": "<p>True if success</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "message",
+            "description": "<p>A information message</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X PUT -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_name\" }' \\\nhttp://127.0.0.1:5000/api/v1/variables/:id",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/variables/routes.py",
+    "groupTitle": "Variables"
+  },
+  {
+    "type": "get",
+    "url": "/variables/:id",
+    "title": "Get a single variable",
+    "name": "get_variable",
+    "group": "Variables",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The variable's id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The variable's id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The variable's name.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "insert_date",
+            "description": "<p>The variable's inserted date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "update_date",
+            "description": "<p>The variable's updated date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "delete_date",
+            "description": "<p>The variable's deleted date</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET http://127.0.0.1:5000/api/v1/variables/:id",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/variables/routes.py",
+    "groupTitle": "Variables"
+  },
+  {
+    "type": "get",
+    "url": "/variables",
+    "title": "Get all variables",
+    "name": "get_variables",
+    "group": "Variables",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>(query parameter) Objects per page to display</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>(query parameter) Current page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "filter",
+            "description": "<p>(query parameter) Filter on name parameter (use * for searching any strings. Ex: <em>mavariable</em>)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The variable's id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The variable's name.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "insert_date",
+            "description": "<p>The variable's inserted date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "update_date",
+            "description": "<p>The variable's updated date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "delete_date",
+            "description": "<p>The variable's deleted date</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/variables",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/variables/routes.py",
+    "groupTitle": "Variables"
+  },
+  {
+    "type": "delete",
+    "url": "/variables/:id",
+    "title": "Delete a single variable",
+    "version": "1.0.0",
+    "name": "rm_variable",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "group": "Variables",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The variable's id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>Success (True if ok).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>A success or error message.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/variables/:id",
+        "type": "curl"
+      }
+    ],
+    "filename": "app/variables/routes.py",
+    "groupTitle": "Variables"
   }
 ] });

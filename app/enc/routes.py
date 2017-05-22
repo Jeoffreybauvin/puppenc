@@ -2,11 +2,13 @@ from flask_restful import Resource
 from flask import jsonify, request, g
 
 from app.puppenc import app, api, db, output_yaml, auth, PuppencResource
+import json
 
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
 from app.environments.models import Environment
 from app.classes.models import Class
+from app.variables.models import Variable
 
 class Enc(PuppencResource):
     @auth.login_required
@@ -18,8 +20,7 @@ class Enc(PuppencResource):
         @apiPermission user
         @apiVersion 1.0.0
         @apiParam   {String}    node_name       (uri parameter) The node's name
-        @apiParam   {String}    output=yaml     (query parameter) Output result. Example : json
-        @apiSuccess {Number}    id              The hostgroup's id.
+        @apiParam   {String}    [output=yaml]     (query parameter) Output result. Avaiable methods : yaml / json
         @apiSuccess {String}    name            The hostgroup's name.
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
         @apiSuccess {Datetime}  update_date     The hostgroup's updated date
@@ -37,64 +38,87 @@ class Enc(PuppencResource):
                 return { "success": False, "message": "Node not found" }, 404
 
             if node.hostgroup_id is None or node.environment_id is None:
-                class_name = ''
-                hostgroup_name = ''
-                environment_name = ''
+                return { "success": False, "message": "Please, set a hostgroup and an environment" }, 404
             else:
-                hg_class = Node.query.join(
+                # I have an hostgroup or an environment, we can continue
+                data = Node.query.join(
                     Hostgroup,
                     Node.hostgroup_id==Hostgroup.id,
                 ).join(
                     Class,
                     Hostgroup.class_id==Class.id
-                ).add_columns(
-                    Hostgroup.name.label('hostgroup_name'),
-                    Class.name.label('class_name'),
-                ).filter(
-                    Node.name == node_name
-                ).first()
-
-                class_name       = hg_class.class_name
-                hostgroup_name   = hg_class.hostgroup_name
-
-
-                # Death query
-                environment_node = Node.query.join(
+                ).join(
                     Environment,
-                    Node.environment_id==Environment.id,
+                    Node.environment_id==Environment.id
                 ).add_columns(
-                    Node.id,
-                    Node.environment_id,
-                    Environment.name.label('environment_name'),
+                    Class.name.label('class_name'),
+                    Hostgroup.name.label('hostgroup_name'),
+                    Environment.name.label('environment_name')
                 ).filter(
                     Node.name == node_name
                 ).first()
 
-                environment_name = environment_node.environment_name
+                if not data:
+                    # I have all except a class in my hostgroup
+                    app.logger.warning('No class for the node %s', node_name)
+                    class_name = ''
 
+                    # Let's make a different request to handle a missing class
+                    data = Node.query.join(
+                        Hostgroup,
+                        Node.hostgroup_id==Hostgroup.id,
+                    ).join(
+                        Environment,
+                        Node.environment_id==Environment.id
+                    ).add_columns(
+                        Hostgroup.name.label('hostgroup_name'),
+                        Environment.name.label('environment_name')
+                    ).filter(
+                        Node.name == node_name
+                    ).first()
 
-            if not hostgroup_name:
-                hostgroup_name = ''
+                else:
+                    class_name = data.class_name
 
-            if not environment_name:
-                environment_name = ''
+                hostgroup_name = data.hostgroup_name
+                environment_name = data.environment_name
 
-            app.logger.info('Get ENC on %s, by %s', node_name, g.user)
-            # We need to display it on "ENC" format
-            res = {
-                'classes': [
-                    class_name,
-                ],
-                'parameters': {
-                    'puppetmaster': '',
-                    'hostgroup': hostgroup_name
-                },
-                'environment': environment_name
-            }
+                # Parameters now
+                params = {}
+                params['parameters'] = {}
+                # legacy
+                params['parameters']['puppetmaster'] = ''
+                params['parameters']['hostgroup'] = hostgroup_name
 
-            if not res:
-                return { "success": False, "message": "Node not found" }, 404
-            else:
+                for p in node.nodes_var:
+                    if p.content == 'true':
+                        content = True
+                    elif p.content == 'false':
+                        content = False
+                    else:
+                        if p.content[0] == '{':
+                            try:
+                                content = json.loads(p.content)
+                            except:
+                                app.logger.info('unable to format json')
+                                content = p.content
+                        else:
+                            content = p.content
+
+                    params['parameters'][p.name] = content
+
+                app.logger.info('Get ENC on %s, by %s', node_name, g.user)
+                # We need to display it on "ENC" format
+                base = {
+                    'classes': [
+                        class_name,
+                    ],
+                    'environment': environment_name
+                }
+
+                res = base.copy()
+                res.update(params)
+
                 if output == 'json':
                     return jsonify(res, 200)
                 else:
