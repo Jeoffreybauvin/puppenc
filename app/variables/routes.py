@@ -86,8 +86,12 @@ class Variables(PuppencResource):
         name = data['name']
 
         obj = Variable(name, content=content)
-        db.session.add(obj)
-        db.session.commit()
+
+        try:
+            db.session.add(obj)
+            db.session.commit()
+        except:
+            return { "success": False, "message": u"Something went wrong when trying to insert %s" % name  }, 500
         app.logger.info(u"Create Item %s %s by %s" % (Variable, name, g.user))
         return jsonify({obj.id: {
             'name': name,

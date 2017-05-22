@@ -9,6 +9,7 @@ class Variable(db.Model):
     insert_date = db.Column(db.DateTime, default=db.func.current_timestamp())
     update_date = db.Column(db.DateTime, default=None)
     delete_date = db.Column(db.DateTime, default=None)
+    __table_args__ = (db.UniqueConstraint('name', 'content'),)
 
     def __init__(self, name, content=None):
         self.name = name
