@@ -51,6 +51,7 @@ class Enc(PuppencResource):
                     Environment,
                     Node.environment_id==Environment.id
                 ).add_columns(
+                    Node.id.label('node_id'),
                     Class.name.label('class_name'),
                     Hostgroup.name.label('hostgroup_name'),
                     Environment.name.label('environment_name')
@@ -82,6 +83,7 @@ class Enc(PuppencResource):
 
                 hostgroup_name = data.hostgroup_name
                 environment_name = data.environment_name
+                node_id = data.node_id
 
                 # Parameters now
                 params = {}
@@ -89,6 +91,7 @@ class Enc(PuppencResource):
                 # legacy
                 params['parameters']['puppetmaster'] = ''
                 params['parameters']['hostgroup'] = hostgroup_name
+                params['parameters']['puppenc_node_id'] = node_id
 
                 for p in node.nodes_var:
                     if p.content == 'true':
