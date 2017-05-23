@@ -75,7 +75,7 @@ class NodesVariables(Resource):
 
         try:
             content = request.get_json(silent=True)
-            t = Node.query.get(2000)
+            t = Node.query.get(id)
             a = Variable.query.get(content['variable_id'])
             t.nodes_var.remove(a)
             db.session.commit()
