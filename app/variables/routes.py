@@ -21,7 +21,7 @@ class Variables(PuppencResource):
         @apiGroup Variables
         @apiVersion 1.0.0
         @apiPermission user
-        @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display
+        @apiParam   {String}    [limit=10]      (query parameter) Objects per page to display. Use limit=0 for disabling limit
         @apiParam   {String}    [page=1]        (query parameter) Current page
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *mavariable*)
         @apiSuccess {Number}    id              The variable's id.

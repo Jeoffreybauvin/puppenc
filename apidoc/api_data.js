@@ -186,7 +186,7 @@ define({ "api": [
             "optional": true,
             "field": "limit",
             "defaultValue": "10",
-            "description": "<p>(query parameter) Objects per page to display</p>"
+            "description": "<p>(query parameter) Objects per page to display. Use limit=0 for disabling limit</p>"
           },
           {
             "group": "Parameter",
@@ -582,7 +582,7 @@ define({ "api": [
             "optional": true,
             "field": "limit",
             "defaultValue": "10",
-            "description": "<p>(query parameter) Objects per page to display</p>"
+            "description": "<p>(query parameter) Objects per page to display. Use limit=0 for disabling limit</p>"
           },
           {
             "group": "Parameter",
@@ -846,7 +846,7 @@ define({ "api": [
             "optional": true,
             "field": "limit",
             "defaultValue": "10",
-            "description": "<p>(query parameter) Objects per page to display</p>"
+            "description": "<p>(query parameter) Objects per page to display. Use limit=0 for disabling limit</p>"
           },
           {
             "group": "Parameter",
@@ -1221,7 +1221,7 @@ define({ "api": [
             "optional": true,
             "field": "limit",
             "defaultValue": "10",
-            "description": "<p>(query parameter) Objects per page to display</p>"
+            "description": "<p>(query parameter) Objects per page to display. Use limit=0 for disabling limit</p>"
           },
           {
             "group": "Parameter",
@@ -1831,7 +1831,7 @@ define({ "api": [
             "optional": true,
             "field": "limit",
             "defaultValue": "10",
-            "description": "<p>(query parameter) Objects per page to display</p>"
+            "description": "<p>(query parameter) Objects per page to display. Use limit=0 for disabling limit</p>"
           },
           {
             "group": "Parameter",

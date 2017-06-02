@@ -72,7 +72,10 @@ def get_item(Type):
                 if obj_id:
                     obj = Type.query.filter_by(id=int(obj_id)).first()
                 else:
-                    obj = Type.query.paginate(cur_page, nb_limit).items
+                    if nb_limit == 0:
+                        obj = Type.query.all()
+                    else:
+                        obj = Type.query.paginate(cur_page, nb_limit).items
 
             if obj is None:
                 return { "success": False, "message": u"%s (id %s) not found" % (Type, obj_id)  }, 404
