@@ -35,9 +35,11 @@ class Enc(PuppencResource):
 
             node = Node.query.filter_by(name=node_name).first()
             if not node:
+                app.logger.warning('ENC : Cannot find  %s, by %s', node_name, g.user)
                 return { "success": False, "message": "Node not found" }, 404
 
             if node.hostgroup_id is None or node.environment_id is None:
+                app.logger.warning('ENC : Please, set a hostgroup and an environment')
                 return { "success": False, "message": "Please, set a hostgroup and an environment" }, 404
             else:
                 # I have an hostgroup or an environment, we can continue
