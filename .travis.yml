@@ -20,7 +20,11 @@ before_install:
 - ulimit -a
 - free -m
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
+
+after_failure:
+- free -m -t
 - dmesg
+- docker-compose -f tests/docker-compose.yml logs
 
 script:
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests resttest.py --url=http://127.0.0.1:5000 tests/tests.yaml --log info
