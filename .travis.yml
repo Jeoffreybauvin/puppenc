@@ -11,19 +11,13 @@ before_install:
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 - sudo apt-get update
 - sudo apt-get -y install docker-ce
-- docker -v
 - docker pull puppenc/api:latest
 - docker pull mysql:5.6
+- cp tests/config.py.sample config.py
 - docker-compose -f tests/docker-compose.yml up -d
-- docker-compose -f tests/docker-compose.yml exec puppenc-api-tests ls /puppenc
-- docker-compose -f tests/docker-compose.yml ps
-- ulimit -a
-- free -m
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
 
 after_failure:
-- free -m -t
-- dmesg
 - docker-compose -f tests/docker-compose.yml logs
 
 script:
