@@ -7,7 +7,7 @@ services:
     ports:
       - "5005:5000"
     volumes:
-      -  $PWD/../:/puppenc
+      -  $PWD:/puppenc
     links:
       - puppenc-mysql-tests
     entrypoint:
