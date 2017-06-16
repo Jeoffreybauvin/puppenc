@@ -1,6 +1,5 @@
 language: python
 sudo: required
-dist: jessie
 install: true
 
 services:
