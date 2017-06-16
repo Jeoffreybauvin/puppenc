@@ -1,1 +1,14 @@
 language: python
+sudo: false
+dist: jessie
+
+services:
+  - docker
+
+before_install:
+- docker pull puppenc/api:latest
+- docker pull mysql:5.6
+- docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
+
+script:
+- docker-compose -f tests/docker-compose.yml exec puppenc-api-tests resttest.py --url=127.0.0.1:5000 tests/tests.yaml --log info
