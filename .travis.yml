@@ -17,6 +17,8 @@ before_install:
 - docker-compose -f tests/docker-compose.yml up -d
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests ls /puppenc
 - docker-compose -f tests/docker-compose.yml ps
+- ulimit -a
+- free -m
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
 
 script:
