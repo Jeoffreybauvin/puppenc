@@ -49,7 +49,7 @@ def init_db():
     try:
         db.create_all()
     except:
-        app.logger.error('Aborting, something went wrong on creating the tables')
+        app.logger.error('Aborting, something went wrong on creating the tables on host %s@%s:%s' % (app.config['DB_USER'], app.config['DB_HOST'], app.config['DB_NAME']))
 
     app.logger.info('Tables creation : done.')
 

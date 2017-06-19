@@ -1,0 +1,31 @@
+language: python
+sudo: required
+install: true
+
+services:
+  - docker
+
+before_install:
+- ulimit -s 1082768
+# Last version of docker
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- sudo apt-get update
+- sudo apt-get -y install docker-ce
+# Puppenc specific
+- docker pull puppenc/api:latest
+- docker pull mysql:5.6
+- cp tests/config.py.sample config.py
+- docker-compose -f tests/docker-compose.yml up -d
+# Need it...
+- sleep 30
+- docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
+
+after_failure:
+- docker-compose -f tests/docker-compose.yml logs
+
+after_success:
+- docker-compose -f tests/docker-compose.yml down
+
+script:
+- docker-compose -f tests/docker-compose.yml exec puppenc-api-tests resttest.py --url=http://127.0.0.1:5000 tests/tests.yaml --log info

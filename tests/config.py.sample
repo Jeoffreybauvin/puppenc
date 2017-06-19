@@ -1,0 +1,9 @@
+DEBUG = False
+PROFILE = False
+
+SECRET_KEY = "my_secret_key"
+
+AUTH_DURATION = 6000
+ENABLE_AUTH = False
+
+DB_HOST = "puppenc-mysql-tests"
