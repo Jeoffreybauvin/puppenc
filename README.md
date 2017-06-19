@@ -2,6 +2,8 @@
 
 A simple external node classifier (ENC) for Puppet
 
+[![Build Status](https://travis-ci.org/Jeoffreybauvin/puppenc.svg?branch=master)](https://travis-ci.org/Jeoffreybauvin/puppenc)
+
 ### Specs
 
 | Object | Methods | Description |
