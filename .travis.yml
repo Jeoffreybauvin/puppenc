@@ -16,6 +16,7 @@ before_install:
 - cp tests/config.py.sample config.py
 - docker-compose -f tests/docker-compose.yml up -d
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
+- docker-compose -f tests/docker-compose.yml ps
 
 after_failure:
 - docker-compose -f tests/docker-compose.yml logs
