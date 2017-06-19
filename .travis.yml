@@ -22,5 +22,5 @@ after_failure:
 - docker-compose -f tests/docker-compose.yml logs
 
 script:
-  - true
+  - false
 # - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests resttest.py --url=http://127.0.0.1:5000 tests/tests.yaml --log info
