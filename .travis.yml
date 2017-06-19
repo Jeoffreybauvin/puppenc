@@ -15,6 +15,7 @@ before_install:
 - docker pull mysql:5.6
 - cp tests/config.py.sample config.py
 - docker-compose -f tests/docker-compose.yml up -d
+- sleep 60
 - docker-compose -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup
 - docker-compose -f tests/docker-compose.yml ps
 
