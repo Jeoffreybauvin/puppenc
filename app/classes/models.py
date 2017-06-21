@@ -9,7 +9,7 @@ class Class(db.Model):
     update_date = db.Column(db.DateTime, default=None)
     delete_date = db.Column(db.DateTime, default=None)
 
-    hostgroupR = db.relationship('Hostgroup', backref='class_info', lazy='dynamic')
+    hostgroups = db.relationship('Hostgroup', backref='class_info', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name

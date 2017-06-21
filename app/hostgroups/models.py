@@ -12,7 +12,7 @@ class Hostgroup(db.Model):
     delete_date = db.Column(db.DateTime, default=None)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
 
-    nodesR = db.relationship('Node', backref='hostgroup_info', lazy='dynamic')
+    nodes = db.relationship('Node', backref='hostgroup_info', lazy='dynamic')
 
     def __init__(self, name, class_id):
         self.name = name
