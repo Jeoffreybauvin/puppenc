@@ -12,21 +12,26 @@ class Users(PuppencResource):
         self.user_schema = UserSchema()
         self.users_schema = UserSchema(many=True)
 
-    """
-    @api {post} /users Create a user
-    @apiName post_user
-    @apiGroup Users
-    @apiVersion 1.0.0
-    @apiPermission public
-    @apiParam   {String}    name              (json document) The user's name
-    @apiParam   {Password}  password          (json document)The users's password
-    @apiSuccess {String}    name              The user's name
-    @apiExample {curl} Example usage :
-        curl -X POST -H "Content-Type: application/json" \
-        -d '{"name":"my_username","password":"my_password"}' \
-        http://127.0.0.1:5000/api/v1/users
-    """
     def post(self):
+        """
+        @api {post} /users Create a user
+        @apiName post_user
+        @apiGroup Users
+        @apiVersion 1.0.0
+        @apiPermission public
+        @apiParam   {String}    name              (json document) The user's name
+        @apiParam   {Password}  password          (json document)The users's password
+        @apiSuccess {String}    name              The user's name
+        @apiExample {curl} Example usage :
+            curl -X POST -H "Content-Type: application/json" \
+            -d '{"name":"my_username","password":"my_password"}' \
+            http://127.0.0.1:5000/api/v1/users
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "name": "my_username"
+            }
+        """
         name = request.json.get('name')
         password = request.json.get('password')
         if name is None or password is None:
@@ -40,19 +45,24 @@ class Users(PuppencResource):
         app.logger.info("Create user %s", user.name)
         return { 'name': user.name }, 200
 
-    """
-    @api {get} /users/<id> Get a single user
-    @apiVersion 1.0.0
-    @apiName get_user
-    @apiGroup Users
-    @apiParam   {Number}    id                The user's id
-    @apiSuccess {String}    name              The user's name
-    @apiPermission public
-    @apiExample {curl} Example usage :
-        curl -X GET -H "Content-Type: application/json" \
-        http://127.0.0.1:5000/api/v1/users/1
-    """
     def get(self, id):
+        """
+        @api {get} /users/<id> Get a single user
+        @apiVersion 1.0.0
+        @apiName get_user
+        @apiGroup Users
+        @apiParam   {Number}    id                The user's id
+        @apiSuccess {String}    name              The user's name
+        @apiPermission public
+        @apiExample {curl} Example usage :
+            curl -X GET -H "Content-Type: application/json" \
+            http://127.0.0.1:5000/api/v1/users/1
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "name": "my_username"
+            }
+        """
         user = User.query.get(id)
         if not user:
             abort(400)
@@ -64,21 +74,21 @@ class Tokens(PuppencResource):
         self.user_schema = UserSchema()
         self.users_schema = UserSchema(many=True)
 
-    """
-    @api {get} /tokens Get a token
-    @apiName get_token
-    @apiGroup Tokens
-    @apiVersion 1.0.0
-    @apiPermission user
-    @apiSuccess {String}    token              The token
-    @apiParam   {Number}    [duration=600]     (query parameter) Use a custom token duration
-    @apiSuccess {Number}    duration           The token's validity
-    @apiExample {curl} Example usage :
-        curl -X GET -H "Content-Type: application/json" \
-        http://127.0.0.1:5000/api/v1/tokens
-    """
     @auth.login_required
     def get(self):
+        """
+        @api {get} /tokens Get a token
+        @apiName get_token
+        @apiGroup Tokens
+        @apiVersion 1.0.0
+        @apiPermission user
+        @apiSuccess {String}    token              The token
+        @apiParam   {Number}    [duration=600]     (query parameter) Use a custom token duration
+        @apiSuccess {Number}    duration           The token's validity
+        @apiExample {curl} Example usage :
+            curl -X GET -H "Content-Type: application/json" \
+            http://127.0.0.1:5000/api/v1/tokens
+        """
         duration = int(request.args.get('duration', app.config['AUTH_DURATION']))
         token = g.user.generate_auth_token(expiration=duration)
         return jsonify({'token': token.decode('ascii'), 'duration': duration})

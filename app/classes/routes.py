@@ -26,11 +26,36 @@ class Classes(PuppencResource):
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *maclass*)
         @apiSuccess {Number}    id              The class's id.
         @apiSuccess {String}    name            The class's name.
+        @apiSuccess {Array}     hostgroups      The class's hostgroups (by id)
         @apiSuccess {Datetime}  insert_date     The class's inserted date
         @apiSuccess {Datetime}  update_date     The class's updated date
         @apiSuccess {Datetime}  delete_date     The class's deleted date
         @apiExample {curl} Example usage :
             curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/classes
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            [
+              {
+                "delete_date": null,
+                "hostgroups": [
+                  1
+                ],
+                "id": 1,
+                "insert_date": "2017-04-11T13:55:40+00:00",
+                "name": "role::webserver",
+                "update_date": null
+              },
+              {
+                "delete_date": null,
+                "hostgroups": [
+                  2
+                ],
+                "id": 2,
+                "insert_date": "2017-04-11T13:55:25+00:00",
+                "name": "role::log",
+                "update_date": null
+              }
+            ]
         """
 
         """
@@ -42,11 +67,24 @@ class Classes(PuppencResource):
         @apiParam   {Number}    id              The class's id.
         @apiSuccess {Number}    id              The class's id.
         @apiSuccess {String}    name            The class's name.
+        @apiSuccess {Array}     hostgroups      The class's hostgroups (by id)
         @apiSuccess {Datetime}  insert_date     The class's inserted date
         @apiSuccess {Datetime}  update_date     The class's updated date
         @apiSuccess {Datetime}  delete_date     The class's deleted date
         @apiExample {curl} Example usage :
             curl -X GET http://127.0.0.1:5000/api/v1/classes/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "delete_date": null,
+                "hostgroups": [
+                  1
+                ],
+                "id": 1,
+                "insert_date": "2017-04-11T13:55:40+00:00",
+                "name": "role::webserver",
+                "update_date": null
+            }
         """
         if not id:
             return self.classes_schema.jsonify(g.obj_info)
@@ -70,6 +108,14 @@ class Classes(PuppencResource):
             curl -X POST -H "Content-Type: application/json" \
             -d '{ "name": "role::my_class" }' \
             http://127.0.0.1:5000/api/v1/classes
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "333": {
+                "name": "role::my_class"
+              }
+            }
+
         """
         pass
 
@@ -91,6 +137,12 @@ class Classes(PuppencResource):
             curl -X PUT -H "Content-Type: application/json" \
             -d '{ "name": "role::my_class" }' \
             http://127.0.0.1:5000/api/v1/classes/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "successfully modified",
+                "success": true
+            }
         """
         pass
 
@@ -109,5 +161,11 @@ class Classes(PuppencResource):
         @apiSuccess {String}    message         A success or error message.
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/classes/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "<Class 'role::my_new_class'> deleted",
+                "success": true
+            }
         """
         pass

@@ -26,9 +26,36 @@ class Hostgroups(PuppencResource):
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *maclass*)
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
+        @apiSuccess {Array}     nodes           The environment's nodes (by id)
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
         @apiSuccess {Datetime}  update_date     The hostgroup's updated date
         @apiSuccess {Datetime}  delete_date     The hostgroup's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/hostgroups
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            [
+              {
+                "class_id": 1,
+                "id": 1,
+                "insert_date": "2017-04-11T13:57:08+00:00",
+                "name": "webserver",
+                "nodes": [
+                  8,
+                  42,
+                  2661
+                ],
+                "update_date": null
+              },
+              {
+                "class_id": 2,
+                "id": 2,
+                "insert_date": "2017-04-11T13:56:40+00:00",
+                "name": "logs",
+                "nodes": [],
+                "update_date": null
+              }
+            ]
         """
 
         """
@@ -40,9 +67,27 @@ class Hostgroups(PuppencResource):
         @apiParam   {Number}    id              The hostgroup's id.
         @apiSuccess {Number}    id              The hostgroup's id.
         @apiSuccess {String}    name            The hostgroup's name.
+        @apiSuccess {Array}     nodes           The environment's nodes (by id)
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
         @apiSuccess {Datetime}  update_date     The hostgroup's updated date
         @apiSuccess {Datetime}  delete_date     The hostgroup's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET http://127.0.0.1:5000/api/v1/classes/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "class_id": 10,
+              "id": 15,
+              "insert_date": "2017-04-11T13:56:30+00:00",
+              "name": "my_hostgroup",
+              "nodes": [
+                2164,
+                2165,
+                2166,
+                2167
+              ],
+              "update_date": "2017-05-09T17:08:57+00:00"
+            }
         """
         if not id:
             return self.hostgroups_schema.jsonify(g.obj_info)
@@ -63,6 +108,17 @@ class Hostgroups(PuppencResource):
         @apiParam   {String}    name            The hostgroup's name.
         @apiParam   {Number}    class_id        The related class id.
         @apiSuccess {Number}    id              The hostgroup's id.
+        @apiExample {curl} Example usage :
+            curl -X POST -H "Content-Type: application/json" \
+            -d '{ "name": "my_new_hostgroup" }' \
+            http://127.0.0.1:5000/api/v1/hostgroups
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "227": {
+                "name": "my_new_hostgroup"
+              }
+            }
         """
         content = request.get_json(silent=True)
         if not 'class_id' in content:
@@ -96,6 +152,12 @@ class Hostgroups(PuppencResource):
             curl -X PUT -H "Content-Type: application/json" \
             -d '{ "name": "my_new_hostgroup" }' \
             http://127.0.0.1:5000/api/v1/hostgroups/1
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "successfully modified",
+                "success": true
+            }
         """
         pass
 
@@ -112,5 +174,13 @@ class Hostgroups(PuppencResource):
         @apiParam   {Number}    id              The hostgroup's id.
         @apiSuccess {Boolean}   success         Success (True if ok).
         @apiSuccess {String}    message         A success or error message.
+        @apiExample {curl} Example usage :
+            curl -X DELETE http://127.0.0.1:5000/api/v1/environments/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "<Hostgroup 'my_new_hostgroup'> deleted",
+                "success": true
+            }
         """
         pass
