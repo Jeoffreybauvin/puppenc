@@ -26,11 +26,40 @@ class Environments(PuppencResource):
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *maclass*)
         @apiSuccess {Number}    id              The environment's id
         @apiSuccess {String}    name            The environment's name
+        @apiSuccess {Array}     nodes           The environment's nodes (by id)
         @apiSuccess {Datetime}  insert_date     The environment's inserted date
         @apiSuccess {Datetime}  update_date     The environment's updated date
         @apiSuccess {Datetime}  delete_date     The environment's deleted date
         @apiExample {curl} Example usage :
             curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/environments
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            [
+              {
+                "delete_date": null,
+                "id": 1,
+                "insert_date": "2017-04-11T13:56:03+00:00",
+                "name": "stable",
+                "nodes": [
+                  104,
+                  2582,
+                  2588
+                ],
+                "update_date": null
+              },
+              {
+                "delete_date": null,
+                "id": 2,
+                "insert_date": "2017-04-11T13:56:04+00:00",
+                "name": "staging",
+                "nodes": [
+                  8,
+                  34,
+                  42
+                ],
+                "update_date": null
+              }
+            ]
         """
         """
         @api {get} /environments/:id Get a single environment
@@ -41,11 +70,26 @@ class Environments(PuppencResource):
         @apiParam   {Number}    id              (uri parameter) The environment's id.
         @apiSuccess {Number}    id              The environment's id.
         @apiSuccess {String}    name            The environment's name.
+        @apiSuccess {Array}     nodes           The environment's nodes (by id)
         @apiSuccess {Datetime}  insert_date     The environment's inserted date
         @apiSuccess {Datetime}  update_date     The environment's updated date
         @apiSuccess {Datetime}  delete_date     The environment's deleted date
         @apiExample {curl} Example usage :
             curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/environments/1
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "delete_date": null,
+              "id": 2,
+              "insert_date": "2017-04-11T13:56:03+00:00",
+              "name": "my_environment",
+              "nodes": [
+                1498,
+                2817,
+                2818
+              ],
+              "update_date": null
+            }
         """
         if not id:
             return self.environments_schema.jsonify(g.obj_info)
@@ -69,6 +113,13 @@ class Environments(PuppencResource):
             curl -X POST -H "Content-Type: application/json" \
             -d '{ "name": "my_new_environment" }' \
             http://127.0.0.1:5000/api/v1/environments
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "227": {
+                "name": "my_new_environment"
+              }
+            }
         """
         pass
 
@@ -92,6 +143,12 @@ class Environments(PuppencResource):
             curl -X PUT -H "Content-Type: application/json" \
             -d '{ "name": "my_new_environment" }' \
             http://127.0.0.1:5000/api/v1/environments/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "successfully modified",
+                "success": true
+            }
         """
         pass
 
@@ -110,5 +167,11 @@ class Environments(PuppencResource):
         @apiSuccess {String}    message         A success or error message.
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/environments/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "<Environment 'my_new_environment'> deleted",
+                "success": true
+            }
         """
         pass

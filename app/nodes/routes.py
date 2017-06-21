@@ -28,11 +28,42 @@ class Nodes(Resource):
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *maclass*)
         @apiSuccess {Number}    id              The node's id.
         @apiSuccess {String}    name            The node's name.
+        @apiSuccess {Array}     nodes_var       The node's variables (by id)
         @apiSuccess {Datetime}  insert_date     The node's inserted date
         @apiSuccess {Datetime}  update_date     The node's updated date
         @apiSuccess {Datetime}  delete_date     The node's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/nodes
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            [
+              {
+                "active": 1,
+                "delete_date": null,
+                "environment_id": 2,
+                "hostgroup_id": 1,
+                "id": 8,
+                "insert_date": "2017-04-11T14:00:38+00:00",
+                "name": "server01",
+                "nodes_var": [
+                    1,
+                    2
+                ],
+                "update_date": null
+              },
+              {
+                "active": 1,
+                "delete_date": null,
+                "environment_id": 2,
+                "hostgroup_id": 13,
+                "id": 34,
+                "insert_date": "2017-04-11T13:59:20+00:00",
+                "name": "server02",
+                "nodes_var": [],
+                "update_date": null
+              }
+            ]
         """
-
         """
         @api {get} /nodes/:id Get a single node
         @apiVersion 1.0.0
@@ -45,6 +76,21 @@ class Nodes(Resource):
         @apiSuccess {Datetime}  insert_date     The node's inserted date
         @apiSuccess {Datetime}  update_date     The node's updated date
         @apiSuccess {Datetime}  delete_date     The node's deleted date
+        @apiExample {curl} Example usage :
+            curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/nodes/1
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "active": 1,
+              "delete_date": null,
+              "environment_id": 2,
+              "hostgroup_id": 36,
+              "id": 1,
+              "insert_date": "2017-04-11T13:59:20+00:00",
+              "name": "server02",
+              "nodes_var": [],
+              "update_date": null
+            }
         """
         if not id:
             return self.nodes_schema.jsonify(g.obj_info)
@@ -69,6 +115,13 @@ class Nodes(Resource):
             curl -X POST -H "Content-Type: application/json" \
             -d '{ "name": "my_server", "environment_id":1 }' \
             http://127.0.0.1:5000/api/v1/nodes
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+              "2826": {
+                "name": "my_server"
+              }
+            }
         """
         content = request.get_json(silent=True)
         if not 'environment_id' in content:
@@ -108,6 +161,13 @@ class Nodes(Resource):
             curl -X PUT -H "Content-Type: application/json" \
             -d '{ "name": "my_new_server" }' \
             http://127.0.0.1:5000/api/v1/nodes/1
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "successfully modified",
+                "success": true
+            }
+
         """
         node = Node.query.filter_by(id=id).first()
         if not node:
@@ -134,7 +194,7 @@ class Nodes(Resource):
 
 
             db.session.commit()
-            return { "success": True, "message": "Node successfully modified" }, 200
+            return { "success": True, "message": "successfully modified" }, 200
 
     @auth.login_required
     @get_item(Node)
@@ -152,6 +212,11 @@ class Nodes(Resource):
         @apiSuccess {String}    message         A success or error message.
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/nodes/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "success": true
+            }
         """
         if g.obj_info.active == 1:
             Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)

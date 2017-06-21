@@ -5,4 +5,4 @@ class ClassSchema(ma.ModelSchema):
     class Meta:
         model = Class
         # Fields to expose
-        fields = ('id', 'name', 'insert_date', 'update_date', 'delete_date')
+        fields = ('id', 'name', 'insert_date', 'update_date', 'delete_date', 'hostgroups')

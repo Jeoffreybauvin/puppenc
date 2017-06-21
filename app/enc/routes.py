@@ -25,6 +25,17 @@ class Enc(PuppencResource):
         @apiSuccess {Datetime}  insert_date     The hostgroup's inserted date
         @apiSuccess {Datetime}  update_date     The hostgroup's updated date
         @apiSuccess {Datetime}  delete_date     The hostgroup's deleted date
+        @apiExample {curl} Example usage :
+            curl -i http://127.0.0.1:5000/api/v1/enc/:node_name
+        @apiSuccessExample {yaml} Success-Response:
+            HTTP/1.0 200 OK
+            classes:
+            - role::webserver
+            environment: stable
+            parameters:
+                 hostgroup: my_hostgroup
+                 puppenc_node_id: 2740
+                 puppetmaster: ''
         """
         output = str(request.args.get('output', 'yaml'))
 

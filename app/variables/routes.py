@@ -115,6 +115,12 @@ class Variables(PuppencResource):
             curl -X PUT -H "Content-Type: application/json" \
             -d '{ "name": "my_new_name" }' \
             http://127.0.0.1:5000/api/v1/variables/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "successfully modified",
+                "success": true
+            }
         """
         pass
 
@@ -133,5 +139,11 @@ class Variables(PuppencResource):
         @apiSuccess {String}    message         A success or error message.
         @apiExample {curl} Example usage :
             curl -X DELETE http://127.0.0.1:5000/api/v1/variables/:id
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "<Variable 'my_variable'> deleted",
+                "success": true
+            }
         """
         pass

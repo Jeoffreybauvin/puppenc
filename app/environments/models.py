@@ -12,7 +12,7 @@ class Environment(db.Model):
     update_date = db.Column(db.DateTime, default=None)
     delete_date = db.Column(db.DateTime, default=None)
 
-    envR = db.relationship('Node', backref='env_info', lazy='dynamic')
+    nodes = db.relationship('Node', backref='env_info', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name

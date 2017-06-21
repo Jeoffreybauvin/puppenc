@@ -35,7 +35,14 @@
             "description": "<p>The class's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"333\": {\n    \"name\": \"role::my_class\"\n  }\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -77,7 +84,14 @@
             "description": "<p>A information message</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"successfully modified\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -133,6 +147,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "hostgroups",
+            "description": "<p>The class's hostgroups (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -153,7 +174,14 @@
             "description": "<p>The class's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"delete_date\": null,\n    \"hostgroups\": [\n      1\n    ],\n    \"id\": 1,\n    \"insert_date\": \"2017-04-11T13:55:40+00:00\",\n    \"name\": \"role::webserver\",\n    \"update_date\": null\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -225,6 +253,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "hostgroups",
+            "description": "<p>The class's hostgroups (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -245,7 +280,14 @@
             "description": "<p>The class's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"delete_date\": null,\n    \"hostgroups\": [\n      1\n    ],\n    \"id\": 1,\n    \"insert_date\": \"2017-04-11T13:55:40+00:00\",\n    \"name\": \"role::webserver\",\n    \"update_date\": null\n  },\n  {\n    \"delete_date\": null,\n    \"hostgroups\": [\n      2\n    ],\n    \"id\": 2,\n    \"insert_date\": \"2017-04-11T13:55:25+00:00\",\n    \"name\": \"role::log\",\n    \"update_date\": null\n  }\n]",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -300,7 +342,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"<Class 'role::my_new_class'> deleted\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -377,8 +426,22 @@
             "description": "<p>The hostgroup's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\nclasses:\n- role::webserver\nenvironment: stable\nparameters:\n     hostgroup: my_hostgroup\n     puppenc_node_id: 2740\n     puppetmaster: ''",
+          "type": "yaml"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -i http://127.0.0.1:5000/api/v1/enc/:node_name",
+        "type": "curl"
+      }
+    ],
     "filename": "app/enc/routes.py",
     "groupTitle": "ENC"
   },
@@ -418,7 +481,14 @@
             "description": "<p>The environment's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"227\": {\n    \"name\": \"my_new_environment\"\n  }\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -473,7 +543,14 @@
             "description": "<p>A information message</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"successfully modified\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -529,6 +606,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "nodes",
+            "description": "<p>The environment's nodes (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -549,7 +633,14 @@
             "description": "<p>The environment's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"delete_date\": null,\n  \"id\": 2,\n  \"insert_date\": \"2017-04-11T13:56:03+00:00\",\n  \"name\": \"my_environment\",\n  \"nodes\": [\n    1498,\n    2817,\n    2818\n  ],\n  \"update_date\": null\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -621,6 +712,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "nodes",
+            "description": "<p>The environment's nodes (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -641,7 +739,14 @@
             "description": "<p>The environment's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"delete_date\": null,\n    \"id\": 1,\n    \"insert_date\": \"2017-04-11T13:56:03+00:00\",\n    \"name\": \"stable\",\n    \"nodes\": [\n      104,\n      2582,\n      2588\n    ],\n    \"update_date\": null\n  },\n  {\n    \"delete_date\": null,\n    \"id\": 2,\n    \"insert_date\": \"2017-04-11T13:56:04+00:00\",\n    \"name\": \"staging\",\n    \"nodes\": [\n      8,\n      34,\n      42\n    ],\n    \"update_date\": null\n  }\n]",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -696,7 +801,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"<Environment 'my_new_environment'> deleted\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -751,8 +863,22 @@
             "description": "<p>The hostgroup's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"227\": {\n    \"name\": \"my_new_hostgroup\"\n  }\n}",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"my_new_hostgroup\" }' \\\nhttp://127.0.0.1:5000/api/v1/hostgroups",
+        "type": "curl"
+      }
+    ],
     "filename": "app/hostgroups/routes.py",
     "groupTitle": "Hostgroups"
   },
@@ -800,6 +926,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "nodes",
+            "description": "<p>The environment's nodes (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -820,8 +953,22 @@
             "description": "<p>The hostgroup's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"class_id\": 10,\n  \"id\": 15,\n  \"insert_date\": \"2017-04-11T13:56:30+00:00\",\n  \"name\": \"my_hostgroup\",\n  \"nodes\": [\n    2164,\n    2165,\n    2166,\n    2167\n  ],\n  \"update_date\": \"2017-05-09T17:08:57+00:00\"\n}",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET http://127.0.0.1:5000/api/v1/classes/:id",
+        "type": "curl"
+      }
+    ],
     "filename": "app/hostgroups/routes.py",
     "groupTitle": "Hostgroups"
   },
@@ -885,6 +1032,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "nodes",
+            "description": "<p>The environment's nodes (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -905,8 +1059,22 @@
             "description": "<p>The hostgroup's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"class_id\": 1,\n    \"id\": 1,\n    \"insert_date\": \"2017-04-11T13:57:08+00:00\",\n    \"name\": \"webserver\",\n    \"nodes\": [\n      8,\n      42,\n      2661\n    ],\n    \"update_date\": null\n  },\n  {\n    \"class_id\": 2,\n    \"id\": 2,\n    \"insert_date\": \"2017-04-11T13:56:40+00:00\",\n    \"name\": \"logs\",\n    \"nodes\": [],\n    \"update_date\": null\n  }\n]",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/hostgroups",
+        "type": "curl"
+      }
+    ],
     "filename": "app/hostgroups/routes.py",
     "groupTitle": "Hostgroups"
   },
@@ -967,7 +1135,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"successfully modified\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1022,8 +1197,22 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"<Hostgroup 'my_new_hostgroup'> deleted\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X DELETE http://127.0.0.1:5000/api/v1/environments/:id",
+        "type": "curl"
+      }
+    ],
     "filename": "app/hostgroups/routes.py",
     "groupTitle": "Hostgroups"
   },
@@ -1063,7 +1252,14 @@
             "description": "<p>The node's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"2826\": {\n    \"name\": \"my_server\"\n  }\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1119,7 +1315,14 @@
             "description": "<p>The node's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"Successfully assign the variable <Variable 'name'> to the node <Node 'server01'>\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1195,8 +1398,22 @@
             "description": "<p>The node's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n  \"active\": 1,\n  \"delete_date\": null,\n  \"environment_id\": 2,\n  \"hostgroup_id\": 36,\n  \"id\": 1,\n  \"insert_date\": \"2017-04-11T13:59:20+00:00\",\n  \"name\": \"server02\",\n  \"nodes_var\": [],\n  \"update_date\": null\n}",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/nodes/1",
+        "type": "curl"
+      }
+    ],
     "filename": "app/nodes/routes.py",
     "groupTitle": "Nodes"
   },
@@ -1260,6 +1477,13 @@
           },
           {
             "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "nodes_var",
+            "description": "<p>The node's variables (by id)</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Datetime",
             "optional": false,
             "field": "insert_date",
@@ -1280,8 +1504,22 @@
             "description": "<p>The node's deleted date</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 1,\n    \"id\": 8,\n    \"insert_date\": \"2017-04-11T14:00:38+00:00\",\n    \"name\": \"server01\",\n    \"nodes_var\": [\n        1,\n        2\n    ],\n    \"update_date\": null\n  },\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 13,\n    \"id\": 34,\n    \"insert_date\": \"2017-04-11T13:59:20+00:00\",\n    \"name\": \"server02\",\n    \"nodes_var\": [],\n    \"update_date\": null\n  }\n]",
+          "type": "json"
+        }
+      ]
     },
+    "examples": [
+      {
+        "title": "Example usage :",
+        "content": "curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/nodes",
+        "type": "curl"
+      }
+    ],
     "filename": "app/nodes/routes.py",
     "groupTitle": "Nodes"
   },
@@ -1349,7 +1587,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"successfully modified\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1405,7 +1650,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1460,7 +1712,14 @@
             "description": "<p>The node's id.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"OK\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1559,7 +1818,14 @@
             "description": "<p>The user's name</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"name\": \"my_username\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "permission": [
       {
@@ -1619,7 +1885,14 @@
             "description": "<p>The user's name</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"name\": \"my_username\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1722,7 +1995,14 @@
             "description": "<p>A information message</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"successfully modified\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {
@@ -1945,7 +2225,14 @@
             "description": "<p>A success or error message.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.0 200 OK\n{\n    \"message\": \"<Variable 'my_variable'> deleted\",\n    \"success\": true\n}",
+          "type": "json"
+        }
+      ]
     },
     "examples": [
       {

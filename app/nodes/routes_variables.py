@@ -29,6 +29,12 @@ class NodesVariables(Resource):
             curl -X POST -H "Content-Type: application/json" \
             -d '{ "variable_id": 1 }' \
             http://127.0.0.1:5000/api/v1/nodes/2/variables
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "Successfully assign the variable <Variable 'name'> to the node <Node 'server01'>",
+                "success": true
+            }
         """
         content = request.get_json(silent=True)
         if not 'variable_id' in content:
@@ -71,6 +77,13 @@ class NodesVariables(Resource):
             curl -X DELETE -H "Content-Type: application/json" \
             -d '{ "variable_id": 1 }' \
             http://127.0.0.1:5000/api/v1/nodes/2/variables
+        @apiSuccessExample {json} Success-Response:
+            HTTP/1.0 200 OK
+            {
+                "message": "OK",
+                "success": true
+            }
+
         """
 
         try:
