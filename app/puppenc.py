@@ -32,7 +32,7 @@ app.config.from_envvar('PUPPENC_SETTINGS', silent=True)
 app.config.update(dict(SQLALCHEMY_DATABASE_CONN = 'mysql://' + app.config['DB_USER'] + ':' + app.config['DB_PASSWORD'] + '@' + app.config['DB_HOST']))
 app.config.update(dict(SQLALCHEMY_DATABASE_URI = app.config['SQLALCHEMY_DATABASE_CONN'] + '/' + app.config['DB_NAME']))
 
-api = Api(api_bp, prefix=app.config['PREFIX'])
+api = Api(api_bp, prefix=app.config['PREFIX'], catch_all_404s=True)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 auth = HTTPBasicAuth()
