@@ -9,7 +9,7 @@ from app.decorators import *
 from app.nodes.models import Node
 from app.nodes.schema import NodeSchema
 
-class Nodes(Resource):
+class Nodes(PuppencResource):
     def __init__(self):
         self.node_schema = NodeSchema()
         self.nodes_schema = NodeSchema(many=True)

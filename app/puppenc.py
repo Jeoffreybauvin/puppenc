@@ -7,6 +7,7 @@ from flask_marshmallow import Marshmallow
 from marshmallow import validate, fields
 from functools import wraps
 from flask_httpauth import HTTPBasicAuth
+import time
 
 WHOAMI='puppenc'
 
@@ -74,11 +75,51 @@ def output_yaml(data, code, headers=None):
 
 def log_request(func):
     def wrapper(*args, **kwargs):
+        # app.logger.info(request.endpoint)
+        # app.logger.info(request.method)
+        # app.logger.info(request.path)
+        # app.logger.info(request.full_path)
         return func(*args, **kwargs)
     return wrapper
 
 class PuppencResource(Resource):
-    method_decorators = [log_request]
+
+    # Useful interceptor to log all endpoint responses
+    @app.after_request
+    def after_request(response):
+        timestamp = time.strftime('%Y-%b-%d %H:%M')
+
+        if(response.status_code != 200):
+            message = str(response.data)
+        else:
+            message = False
+
+        if not 'user' in g:
+            user = False
+        else:
+            if g.user:
+                user = g.user.name
+            else:
+                user = False
+
+        log = {
+            "timestamp": timestamp,
+            "user": user,
+            "method": request.method,
+            "remote_addr": request.remote_addr,
+            "endpoint": request.endpoint,
+            "path": request.path,
+            "full_path": request.full_path,
+            "return_code": response.status_code,
+            "view_args": request.view_args,
+            "message": message
+        }
+
+        if(response.status_code != 200):
+            app.logger.warning(log)
+        else:
+            app.logger.info(log)
+        return response
 
 from app.environments.routes import Environments
 from app.hostgroups.routes import Hostgroups
@@ -102,7 +143,7 @@ api.add_resource(Tokens, '/tokens')
 
 class Index(PuppencResource):
     def get(self):
-        return { "name": "Puppenc", "version": app.config['VERSION']}, 200
+        return { "name": "Puppenc", "version": app.config['VERSION'], "debug": app.config['DEBUG']}, 200
 
 api.add_resource(Index, '/', '/index')
 

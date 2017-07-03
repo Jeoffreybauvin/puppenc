@@ -10,7 +10,7 @@ from app.nodes.models import Node
 from app.variables.models import Variable, NodeVariable
 from app.nodes.schema import NodeSchema
 
-class NodesVariables(Resource):
+class NodesVariables(PuppencResource):
     @auth.login_required
     @body_is_valid
     @get_item(Node)
