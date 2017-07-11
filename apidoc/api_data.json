@@ -1780,7 +1780,7 @@
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X GET -H \"Content-Type: application/json\" \\\nhttp://127.0.0.1:5000/api/v1/tokens",
+        "content": "curl -X GET -u username:password \\\nhttp://127.0.0.1:5000/api/v1/tokens",
         "type": "curl"
       }
     ],
@@ -1897,7 +1897,7 @@
     "examples": [
       {
         "title": "Example usage :",
-        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{\"name\":\"my_username\",\"password\":\"my_password\"}' \\\nhttp://127.0.0.1:5000/api/v1/users",
+        "content": "curl -X POST -H \"Content-Type: application/json\" \\\n-d '{ \"name\": \"username\", \"password\": \"password\" }' \\\nhttp://127.0.0.1:5000/api/v1/users",
         "type": "curl"
       }
     ],

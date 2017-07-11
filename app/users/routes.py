@@ -24,7 +24,7 @@ class Users(PuppencResource):
         @apiSuccess {String}    name              The user's name
         @apiExample {curl} Example usage :
             curl -X POST -H "Content-Type: application/json" \
-            -d '{"name":"my_username","password":"my_password"}' \
+            -d '{ "name": "username", "password": "password" }' \
             http://127.0.0.1:5000/api/v1/users
         @apiSuccessExample {json} Success-Response:
             HTTP/1.0 200 OK
@@ -86,7 +86,7 @@ class Tokens(PuppencResource):
         @apiParam   {Number}    [duration=600]     (query parameter) Use a custom token duration
         @apiSuccess {Number}    duration           The token's validity
         @apiExample {curl} Example usage :
-            curl -X GET -H "Content-Type: application/json" \
+            curl -X GET -u username:password \
             http://127.0.0.1:5000/api/v1/tokens
         """
         duration = int(request.args.get('duration', app.config['AUTH_DURATION']))
