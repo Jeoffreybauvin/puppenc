@@ -72,21 +72,24 @@ def output_yaml(data, code, headers=None):
     resp.headers.extend(headers)
     return resp
 
-
-def log_request(func):
-    def wrapper(*args, **kwargs):
-        # app.logger.info(request.endpoint)
-        # app.logger.info(request.method)
-        # app.logger.info(request.path)
-        # app.logger.info(request.full_path)
-        return func(*args, **kwargs)
-    return wrapper
-
 class PuppencResource(Resource):
+
+    def start_timer():
+        request.start_time = time.time()
+
+    def stop_timer(response):
+        resp_time = time.time() - request.start_time
+        return resp_time
+
+    @app.before_request
+    def before_request():
+        PuppencResource.start_timer()
 
     # Useful interceptor to log all endpoint responses
     @app.after_request
     def after_request(response):
+        resp_time = PuppencResource.stop_timer(response)
+
         timestamp = time.strftime('%Y-%b-%d %H:%M')
 
         if(response.status_code != 200):
@@ -112,6 +115,7 @@ class PuppencResource(Resource):
             "full_path": request.full_path,
             "return_code": response.status_code,
             "view_args": request.view_args,
+            "time": float(resp_time),
             "message": message
         }
 
