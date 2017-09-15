@@ -26,6 +26,8 @@ class Variables(PuppencResource):
         @apiParam   {String}    [filter]        (query parameter) Filter on name parameter (use * for searching any strings. Ex: *mavariable*)
         @apiSuccess {Number}    id              The variable's id.
         @apiSuccess {String}    name            The variable's name.
+        @apiSuccess {String}    content         The variable's content.
+        @apiSuccess {Number}    class_id        The associated class id.
         @apiSuccess {Datetime}  insert_date     The variable's inserted date
         @apiSuccess {Datetime}  update_date     The variable's updated date
         @apiSuccess {Datetime}  delete_date     The variable's deleted date
@@ -42,6 +44,8 @@ class Variables(PuppencResource):
         @apiParam   {Number}    id              The variable's id.
         @apiSuccess {Number}    id              The variable's id.
         @apiSuccess {String}    name            The variable's name.
+        @apiSuccess {String}    content         The variable's content.
+        @apiSuccess {Number}    class_id        The associated class id.
         @apiSuccess {Datetime}  insert_date     The variable's inserted date
         @apiSuccess {Datetime}  update_date     The variable's updated date
         @apiSuccess {Datetime}  delete_date     The variable's deleted date
@@ -66,11 +70,12 @@ class Variables(PuppencResource):
         @apiDescription Strings named true or false are automatically converted to Booleans. Strings in json format are automatically converted to objects.
         @apiParam   {String}    name            The variable's name.
         @apiParam   {String}    content         The variable's content : you can use json here to specify arrays.
+        @apiParam   {Number}    class_id        The associated class_id
         @apiPermission user
         @apiSuccess {Number}    id              The variable's id.
         @apiExample {curl} Simple string
             curl -X POST -H "Content-Type: application/json" \
-            -d '{ "name": "my_variable", "content": "my_content" }' \
+            -d '{ "name": "my_variable", "content": "my_content", "class_id": 2 }' \
             http://127.0.0.1:5000/api/v1/variables
         @apiExample {curl} JSON
             curl -i -X POST -H "Content-Type: application/json" \
@@ -83,9 +88,14 @@ class Variables(PuppencResource):
         else:
             content = data['content']
 
+        if not 'class_id' in data:
+            class_id = None
+        else:
+            class_id = data['class_id']
+
         name = data['name']
 
-        obj = Variable(name, content=content)
+        obj = Variable(name, content=content, class_id=class_id)
 
         try:
             db.session.add(obj)

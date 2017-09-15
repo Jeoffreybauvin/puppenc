@@ -5,4 +5,4 @@ class VariableSchema(ma.ModelSchema):
     class Meta:
         model = Variable
         # Fields to expose
-        fields = ('id', 'name', 'content', 'insert_date', 'update_date')
+        fields = ('id', 'name', 'content', 'class_id', 'insert_date', 'update_date')

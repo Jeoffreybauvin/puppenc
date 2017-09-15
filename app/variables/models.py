@@ -6,14 +6,16 @@ class Variable(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     content = db.Column(db.String(255))
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
     insert_date = db.Column(db.DateTime, default=db.func.current_timestamp())
     update_date = db.Column(db.DateTime, default=None)
     delete_date = db.Column(db.DateTime, default=None)
     __table_args__ = (db.UniqueConstraint('name', 'content'),)
 
-    def __init__(self, name, content=None):
+    def __init__(self, name, content=None, class_id=None):
         self.name = name
         self.content = content
+        self.class_id = class_id
 
     def __repr__(self):
         return '<Variable %r>' % (self.name)
