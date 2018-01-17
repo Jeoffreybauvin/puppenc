@@ -105,11 +105,16 @@ class PuppencResource(Resource):
             else:
                 user = False
 
+        if request.headers.getlist("X-Forwarded-For"):
+            client_ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            client_ip = request.remote_addr
+
         log = {
             "timestamp": timestamp,
             "user": user,
             "method": request.method,
-            "remote_addr": request.remote_addr,
+            "remote_addr": client_ip,
             "endpoint": request.endpoint,
             "path": request.path,
             "full_path": request.full_path,
