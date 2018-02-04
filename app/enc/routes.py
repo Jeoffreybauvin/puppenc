@@ -135,6 +135,9 @@ class Enc(PuppencResource):
                 res = base.copy()
                 res.update(params)
 
+                Node.query.filter_by(id=node_id).update({ "last_use": db.func.current_timestamp() }, synchronize_session=False)
+                db.session.commit()
+
                 if output == 'json':
                     return jsonify(res, 200)
                 else:

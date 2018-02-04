@@ -5,4 +5,4 @@ class NodeSchema(ma.ModelSchema):
     class Meta:
         model = Node
         # Fields to expose
-        fields = ('id', 'name', 'insert_date', 'update_date', 'delete_date', 'hostgroup_id', 'environment_id', 'active', 'nodes_var')
+        fields = ('id', 'name', 'insert_date', 'update_date', 'delete_date', 'hostgroup_id', 'environment_id', 'active', 'last_use', 'nodes_var')
