@@ -1,5 +1,5 @@
 from flask import jsonify, request, g
-from app.puppenc import app, output_yaml, auth, PuppencResource
+from app.puppenc import app, db, output_yaml, auth, PuppencResource
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
 from app.environments.models import Environment
