@@ -1,14 +1,10 @@
-from flask_restful import Resource
 from flask import jsonify, request, g
-
-from app.puppenc import app, api, db, output_yaml, auth, PuppencResource
-import json
-
+from app.puppenc import app, output_yaml, auth, PuppencResource
 from app.nodes.models import Node
 from app.hostgroups.models import Hostgroup
 from app.environments.models import Environment
 from app.classes.models import Class
-from app.variables.models import Variable
+import json
 
 class Enc(PuppencResource):
     @auth.login_required
@@ -40,7 +36,6 @@ class Enc(PuppencResource):
         output = str(request.args.get('output', 'yaml'))
 
         if not node_name:
-            obj = Node.query.paginate(page, 10).items
             return { "success": False, "message": "No node provided" }, 304
         else:
 
@@ -56,13 +51,13 @@ class Enc(PuppencResource):
                 # I have an hostgroup or an environment, we can continue
                 data = Node.query.join(
                     Hostgroup,
-                    Node.hostgroup_id==Hostgroup.id,
+                    Node.hostgroup_id == Hostgroup.id,
                 ).join(
                     Class,
-                    Hostgroup.class_id==Class.id
+                    Hostgroup.class_id == Class.id
                 ).join(
                     Environment,
-                    Node.environment_id==Environment.id
+                    Node.environment_id == Environment.id
                 ).add_columns(
                     Node.id.label('node_id'),
                     Class.name.label('class_name'),
@@ -80,11 +75,12 @@ class Enc(PuppencResource):
                     # Let's make a different request to handle a missing class
                     data = Node.query.join(
                         Hostgroup,
-                        Node.hostgroup_id==Hostgroup.id,
+                        Node.hostgroup_id == Hostgroup.id,
                     ).join(
                         Environment,
-                        Node.environment_id==Environment.id
+                        Node.environment_id == Environment.id
                     ).add_columns(
+                        Node.id.label('node_id'),
                         Hostgroup.name.label('hostgroup_name'),
                         Environment.name.label('environment_name')
                     ).filter(
@@ -126,14 +122,24 @@ class Enc(PuppencResource):
                 app.logger.info('Get ENC on %s, by %s', node_name, g.user)
                 # We need to display it on "ENC" format
                 base = {
-                    'classes': [
-                        class_name,
-                    ],
                     'environment': environment_name
                 }
 
+                if(class_name != ''):
+                    classes_result = {
+                        'classes': [
+                            class_name,
+                        ],
+                    }
+                else:
+                    classes_result = {
+                        'classes': [],
+                    }
+
+                base.update(classes_result)
                 res = base.copy()
                 res.update(params)
+                app.logger.info(res)
 
                 if output == 'json':
                     return jsonify(res, 200)
