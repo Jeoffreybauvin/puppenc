@@ -1,11 +1,7 @@
-from flask_restful import Resource
 from flask import jsonify, request, g
-
 from sqlalchemy import exc
-
-from app.puppenc import api, db, app, auth, PuppencResource
+from app.puppenc import db, app, auth, PuppencResource
 from app.decorators import *
-
 from app.nodes.models import Node
 from app.nodes.schema import NodeSchema
 
@@ -169,6 +165,7 @@ class Nodes(PuppencResource):
             }
 
         """
+        updates = False
         node = Node.query.filter_by(id=id).first()
         if not node:
             return { "success": False, "message": "Node not found" }, 304
@@ -178,23 +175,30 @@ class Nodes(PuppencResource):
             content = request.get_json(silent=True)
             if 'name' in content:
                 Node.query.filter_by(id=id).update({ "name": content['name'] }, synchronize_session=False)
+                updates = True
 
             if 'environment_id' in content:
                 try:
+                    updates = True
                     Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
                 except exc.SQLAlchemyError:
                     return { "success": False, "message": "Environment not found" }, 301
 
             if 'hostgroup_id' in content:
                 try:
+                    updates = True
                     Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
                 except exc.SQLAlchemyError:
                     app.logger.info(u"Cannot edit node %s : hostgroup %s not found" % (id, content['hostgroup_id']))
                     return { "success": False, "message": "Hostgroup not found" }, 301
 
+            if updates:
+                message="Node successfully modified"
+            else:
+                message="Warning, nothing was modified"
 
             db.session.commit()
-            return { "success": True, "message": "successfully modified" }, 200
+            return { "success": True, "message": message }, 200
 
     @auth.login_required
     @get_item(Node)

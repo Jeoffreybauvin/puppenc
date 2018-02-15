@@ -114,19 +114,26 @@ def edit_item(Type):
             content = request.get_json(force=True, silent=True)
 
             editable_properties = [ 'name', 'environment_id', 'class_id', 'hostgroup_id' ]
+            updates = False
             for prop in editable_properties:
                 if prop in content:
                     try:
+                        updates = True
                         Type.query.filter_by(id=obj_id).update({ prop: content[prop] }, synchronize_session=False)
                     except:
                         app.logger.info('Trying to update %s', prop)
                 else:
                     app.logger.info('No %s given', prop)
 
-            Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
-            db.session.commit()
-            app.logger.debug(u"Edit Item %s by %s" % (Type, g.user))
-            return { "success": True, "message": "successfully modified" }, 200
+            if updates:
+                Type.query.filter_by(id=obj_id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
+                db.session.commit()
+                app.logger.debug(u"Edit Item %s by %s" % (Type, g.user))
+                message="Successfully modified"
+            else:
+                message="Warning, nothing was modified"
+
+            return { "success": True, "message": message }, 200
 
             return f(*args, **kwargs)
         return func_wrapper
