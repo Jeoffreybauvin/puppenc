@@ -1502,13 +1502,20 @@ define({ "api": [
             "optional": false,
             "field": "delete_date",
             "description": "<p>The node's deleted date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Datetime",
+            "optional": false,
+            "field": "last_used",
+            "description": "<p>The node's last use threw /nodes or /enc</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 1,\n    \"id\": 8,\n    \"insert_date\": \"2017-04-11T14:00:38+00:00\",\n    \"name\": \"server01\",\n    \"nodes_var\": [\n        1,\n        2\n    ],\n    \"update_date\": null\n  },\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 13,\n    \"id\": 34,\n    \"insert_date\": \"2017-04-11T13:59:20+00:00\",\n    \"name\": \"server02\",\n    \"nodes_var\": [],\n    \"update_date\": null\n  }\n]",
+          "content": "HTTP/1.0 200 OK\n[\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 1,\n    \"id\": 8,\n    \"insert_date\": \"2017-04-11T14:00:38+00:00\",\n    \"last_used\": \"2017-04-11T14:00:38+00:00\",\n    \"name\": \"server01\",\n    \"nodes_var\": [\n        1,\n        2\n    ],\n    \"update_date\": null\n  },\n  {\n    \"active\": 1,\n    \"delete_date\": null,\n    \"environment_id\": 2,\n    \"hostgroup_id\": 13,\n    \"id\": 34,\n    \"insert_date\": \"2017-04-11T13:59:20+00:00\",\n    \"name\": \"server02\",\n    \"nodes_var\": [],\n    \"update_date\": null\n  }\n]",
           "type": "json"
         }
       ]

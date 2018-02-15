@@ -28,6 +28,7 @@ class Nodes(PuppencResource):
         @apiSuccess {Datetime}  insert_date     The node's inserted date
         @apiSuccess {Datetime}  update_date     The node's updated date
         @apiSuccess {Datetime}  delete_date     The node's deleted date
+        @apiSuccess {Datetime}  last_used       The node's last use threw /nodes or /enc
         @apiExample {curl} Example usage :
             curl -X GET -u user:pwd http://127.0.0.1:5000/api/v1/nodes
         @apiSuccessExample {json} Success-Response:
@@ -40,6 +41,7 @@ class Nodes(PuppencResource):
                 "hostgroup_id": 1,
                 "id": 8,
                 "insert_date": "2017-04-11T14:00:38+00:00",
+                "last_used": "2017-04-11T14:00:38+00:00",
                 "name": "server01",
                 "nodes_var": [
                     1,

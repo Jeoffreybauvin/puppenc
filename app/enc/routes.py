@@ -141,6 +141,9 @@ class Enc(PuppencResource):
                 res.update(params)
                 app.logger.info(res)
 
+                Node.query.filter_by(id=node_id).update({ "last_used": db.func.current_timestamp() }, synchronize_session=False)
+                db.session.commit()
+
                 if output == 'json':
                     return jsonify(res, 200)
                 else:

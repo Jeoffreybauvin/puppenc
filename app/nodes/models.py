@@ -21,7 +21,8 @@ class Node(db.Model):
     hostgroup_id   = db.Column(db.Integer, db.ForeignKey('hostgroups.id'))
     environment_id = db.Column(db.Integer, db.ForeignKey('environments.id'))
     active         = db.Column(db.Integer, default=1)
-    nodes_var   = db.relationship(
+    last_used      = db.Column(db.DateTime, default=None)
+    nodes_var      = db.relationship(
         "Variable",
         secondary=nodes_variables,
         backref=db.backref('variables', lazy='dynamic')
