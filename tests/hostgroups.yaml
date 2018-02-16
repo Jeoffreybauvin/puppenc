@@ -23,40 +23,109 @@
   - body: '{"name": "my_hostgroup"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_hostgroup"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
-    - group: "Hostgroups"
-    - name: "Check my hostgroup"
-    - url: "/api/v1/hostgroups/1"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_hostgroup"}
+  - group: "Hostgroups"
+  - name: "Create the same hostgroup"
+  - url: "/api/v1/hostgroups"
+  - method: "POST"
+  - body: '{"name": "my_hostgroup"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "message", comparator: "contains", expected: "already exists"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 
 - test:
-    - group: "Hostgroups"
-    - name: "Edit a hostgroup"
-    - url: "/api/v1/hostgroups/1"
-    - method: "PUT"
-    - body: '{"name": "my_new_hostgroup"}'
-    - headers: {'Content-Type': 'application/json'}
-    - expected_status: [200]
+  - group: "Hostgroups"
+  - name: "Create a hostgroup with an invalid class_id"
+  - url: "/api/v1/hostgroups"
+  - method: "POST"
+  - body: '{"name": "my_new_again_hostgroup", "class_id": 50}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [500]
+  - validators:
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Something went wrong when adding this hostgroup. Please check the class_id"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 
 - test:
-    - group: "Hostgroups"
-    - name: "Check my hostgroup"
-    - url: "/api/v1/hostgroups/1"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_hostgroup"}
+  - group: "Hostgroups"
+  - name: "Create a hostgroup with a valid class_id"
+  - url: "/api/v1/hostgroups"
+  - method: "POST"
+  - body: '{"name": "my_hostgroup_with_a_class_id", "class_id": 2}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 3}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_hostgroup_with_a_class_id"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}
 
 - test:
-    - group: "Hostgroups"
-    - name: "Delete my hostgroup"
-    - url: "/api/v1/hostgroups/1"
-    - method: 'DELETE'
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+  - group: "Hostgroups"
+  - name: "Check my hostgroup without class_id"
+  - url: "/api/v1/hostgroups/1"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_hostgroup"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "class_id", comparator: "type", expected: "null"}
+
+- test:
+  - group: "Hostgroups"
+  - name: "Check my hostgroup with class_id"
+  - url: "/api/v1/hostgroups/3"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 3}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_hostgroup_with_a_class_id"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}
+
+- test:
+  - group: "Hostgroups"
+  - name: "Edit a hostgroup"
+  - url: "/api/v1/hostgroups/1"
+  - method: "PUT"
+  - body: '{"name": "my_new_hostgroup"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Successfully modified"}
+
+- test:
+  - group: "Hostgroups"
+  - name: "Check my hostgroup"
+  - url: "/api/v1/hostgroups/1"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_hostgroup"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "class_id", comparator: "type", expected: "null"}
+
+- test:
+  - group: "Hostgroups"
+  - name: "Delete my hostgroup"
+  - url: "/api/v1/hostgroups/1"
+  - method: 'DELETE'
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "<Hostgroup 'my_new_hostgroup'> deleted"}
 
 - test:
     - group: "Hostgroups"
@@ -68,18 +137,27 @@
 
 - test:
   - group: "Hostgroups"
-  - name: "Recreate a hostgroup"
+  - name: "Recreate a hostgroup with a valid class_id"
   - url: "/api/v1/hostgroups"
   - method: "POST"
-  - body: '{"name": "my_second_hostgroup", "class_id": 2}'
+  - body: '{"name": "my_final_hostgroup_with_a_class_id", "class_id": 2}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 4}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_final_hostgroup_with_a_class_id"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}
 
 - test:
-    - group: "Hostgroups"
-    - name: "Check my hostgroup"
-    - url: "/api/v1/hostgroups/2"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_hostgroup"}
-        - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}
+  - group: "Hostgroups"
+  - name: "Last check my hostgroup with class_id"
+  - url: "/api/v1/hostgroups/4"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 4}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_final_hostgroup_with_a_class_id"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "class_id", comparator: "eq", expected: 2}

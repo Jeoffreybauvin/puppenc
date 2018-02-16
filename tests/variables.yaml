@@ -16,69 +16,113 @@
 
 - test:
   - group: "Variables"
-  - name: "Create a variable"
+  - name: "Create a variable without content"
   - url: "/api/v1/variables"
   - method: "POST"
-  - body: '{"name": "my_variable", "content": "prout"}'
+  - body: '{"name": "my_variable" }'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
-
-- test:
-    - group: "Variables"
-    - name: "Check my variable"
-    - url: "/api/v1/variables/1"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_variable"}
-        - compare: {jsonpath_mini: "content", comparator: "eq", expected: "prout"}
-
-- test:
-    - group: "Variables"
-    - name: "Edit a variable"
-    - url: "/api/v1/variables/1"
-    - method: "PUT"
-    - body: '{"name": "my_new_variable"}'
-    - headers: {'Content-Type': 'application/json'}
-    - expected_status: [200]
-
-- test:
-    - group: "Variables"
-    - name: "Check my variable"
-    - url: "/api/v1/variables/1"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_variable"}
-
-- test:
-    - group: "Variables"
-    - name: "Delete my variable"
-    - url: "/api/v1/variables/1"
-    - method: 'DELETE'
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
-
-- test:
-    - group: "Variables"
-    - name: "Check my variable after delete"
-    - url: "/api/v1/variables/1"
-    - expected_status: [404]
-    - validators:
-        - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_variable"}
+    - compare: {jsonpath_mini: "content", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
   - group: "Variables"
-  - name: "Recreate a variable"
+  - name: "Create a variable with content"
   - url: "/api/v1/variables"
   - method: "POST"
-  - body: '{"name": "my_second_variable"}'
+  - body: '{"name": "my_variable_with_content", "content": "content_variable" }'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_variable_with_content"}
+    - compare: {jsonpath_mini: "content", comparator: "eq", expected: "content_variable"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
-    - group: "Variables"
-    - name: "Check my variable"
-    - url: "/api/v1/variables/2"
-    - expected_status: [200]
-    - validators:
-        - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_variable"}
+  - group: "Variables"
+  - name: "Create the same variable with content"
+  - url: "/api/v1/variables"
+  - method: "POST"
+  - body: '{"name": "my_variable_with_content", "content": "content_variable" }'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [500]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Something went wrong when trying to insert my_variable_with_content"}
+
+- test:
+  - group: "Variables"
+  - name: "Check my variable without content"
+  - url: "/api/v1/variables/1"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_variable"}
+    - compare: {jsonpath_mini: "content", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+
+- test:
+  - group: "Variables"
+  - name: "Check my variable without content"
+  - url: "/api/v1/variables/2"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_variable_with_content"}
+    - compare: {jsonpath_mini: "content", comparator: "eq", expected: "content_variable"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+
+# - test:
+#     - group: "Variables"
+#     - name: "Edit a variable"
+#     - url: "/api/v1/variables/1"
+#     - method: "PUT"
+#     - body: '{"name": "my_new_variable"}'
+#     - headers: {'Content-Type': 'application/json'}
+#     - expected_status: [200]
+#
+# - test:
+#     - group: "Variables"
+#     - name: "Check my variable"
+#     - url: "/api/v1/variables/1"
+#     - expected_status: [200]
+#     - validators:
+#         - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_variable"}
+#
+# - test:
+#     - group: "Variables"
+#     - name: "Delete my variable"
+#     - url: "/api/v1/variables/1"
+#     - method: 'DELETE'
+#     - expected_status: [200]
+#     - validators:
+#         - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+#
+# - test:
+#     - group: "Variables"
+#     - name: "Check my variable after delete"
+#     - url: "/api/v1/variables/1"
+#     - expected_status: [404]
+#     - validators:
+#         - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+#
+# - test:
+#   - group: "Variables"
+#   - name: "Recreate a variable"
+#   - url: "/api/v1/variables"
+#   - method: "POST"
+#   - body: '{"name": "my_second_variable"}'
+#   - headers: {'Content-Type': 'application/json'}
+#   - expected_status: [200]
+#
+# - test:
+#     - group: "Variables"
+#     - name: "Check my variable"
+#     - url: "/api/v1/variables/2"
+#     - expected_status: [200]
+#     - validators:
+#         - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_variable"}
