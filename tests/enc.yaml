@@ -7,13 +7,16 @@
   #
 
 - test:
-    - group: "ENC"
-    - name: "Check my ENC"
-    - url: "/api/v1/enc/my_second_node"
-    - expected_status: [200]
+  - group: "ENC"
+  - name: "Check my ENC"
+  - url: "/api/v1/enc/my_2nd_node?output=json"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "environment", comparator: "eq", expected: "my_new_env"}
+    - compare: {jsonpath_mini: "classes", comparator: "contains", expected: "role::my_second_test_class"}
 
 - test:
-    - group: "ENC"
-    - name: "Check my ENC  (no server found)"
-    - url: "/api/v1/enc/my_server"
-    - expected_status: [404]
+  - group: "ENC"
+  - name: "Check my ENC  (no server found)"
+  - url: "/api/v1/enc/my_server"
+  - expected_status: [404]
