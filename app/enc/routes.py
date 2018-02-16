@@ -145,6 +145,6 @@ class Enc(PuppencResource):
                 db.session.commit()
 
                 if output == 'json':
-                    return jsonify(res, 200)
+                    return jsonify(res)
                 else:
-                    return output_yaml(res, 200)
+                    return output_yaml(res)

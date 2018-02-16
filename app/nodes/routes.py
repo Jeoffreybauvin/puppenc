@@ -136,9 +136,14 @@ class Nodes(PuppencResource):
         db.session.add(obj)
         db.session.commit()
         app.logger.info(u"Create Item %s %s by %s" % (Node, g.obj_name, g.user))
-        return jsonify({obj.id: {
+
+        return jsonify({
+            'id': obj.id,
             'name': obj.name,
-        }})
+            'environment_id': environment_id,
+            'hostgroup_id': hostgroup_id,
+            'success': True,
+        })
 
 
     @auth.login_required
@@ -170,7 +175,7 @@ class Nodes(PuppencResource):
         updates = False
         node = Node.query.filter_by(id=id).first()
         if not node:
-            return { "success": False, "message": "Node not found" }, 304
+            return { "success": False, "message": "Node not found" }, 404
         else:
             Node.query.filter_by(id=id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
 
@@ -184,7 +189,7 @@ class Nodes(PuppencResource):
                     updates = True
                     Node.query.filter_by(id=id).update({ "environment_id": content['environment_id'] }, synchronize_session=False)
                 except exc.SQLAlchemyError:
-                    return { "success": False, "message": "Environment not found" }, 301
+                    return { "success": False, "message": "Environment not found" }, 500
 
             if 'hostgroup_id' in content:
                 try:
@@ -192,12 +197,12 @@ class Nodes(PuppencResource):
                     Node.query.filter_by(id=id).update({ "hostgroup_id": content['hostgroup_id'] }, synchronize_session=False)
                 except exc.SQLAlchemyError:
                     app.logger.info(u"Cannot edit node %s : hostgroup %s not found" % (id, content['hostgroup_id']))
-                    return { "success": False, "message": "Hostgroup not found" }, 301
+                    return { "success": False, "message": "Hostgroup not found" }, 500
 
             if updates:
-                message="Node successfully modified"
+                message = "Successfully modified"
             else:
-                message="Warning, nothing was modified"
+                message = "Warning, nothing was modified"
 
             db.session.commit()
             return { "success": True, "message": message }, 200
@@ -227,7 +232,7 @@ class Nodes(PuppencResource):
         if g.obj_info.active == 1:
             Node.query.filter_by(id=id).update({ "active": 0, "delete_date": db.func.current_timestamp() }, synchronize_session=False)
             db.session.commit()
-            return { "success": True }, 200
+            return { "success": True, "message": "Node is no longer active" }, 200
         else:
             # Node is already deactivated, we can delete it
             db.session.delete(g.obj_info)
