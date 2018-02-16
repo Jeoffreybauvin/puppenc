@@ -5,6 +5,7 @@ from app.decorators import *
 from app.nodes.models import Node
 from app.nodes.schema import NodeSchema
 
+
 class Nodes(PuppencResource):
     def __init__(self):
         self.node_schema = NodeSchema()
@@ -122,12 +123,13 @@ class Nodes(PuppencResource):
             }
         """
         content = request.get_json(silent=True)
-        if not 'environment_id' in content:
+
+        if 'environment_id' not in content:
             environment_id = None
         else:
             environment_id = content['environment_id']
 
-        if not 'hostgroup_id' in content:
+        if 'hostgroup_id' not in content:
             hostgroup_id = None
         else:
             hostgroup_id = content['hostgroup_id']
@@ -175,13 +177,13 @@ class Nodes(PuppencResource):
         updates = False
         node = Node.query.filter_by(id=id).first()
         if not node:
-            return { "success": False, "message": "Node not found" }, 404
+            return {"success": False, "message": "Node not found"}, 404
         else:
-            Node.query.filter_by(id=id).update({ "update_date": db.func.current_timestamp() }, synchronize_session=False)
+            Node.query.filter_by(id=id).update({"update_date": db.func.current_timestamp()}, synchronize_session=False)
 
             content = request.get_json(silent=True)
             if 'name' in content:
-                Node.query.filter_by(id=id).update({ "name": content['name'] }, synchronize_session=False)
+                Node.query.filter_by(id=id).update({"name": content['name']}, synchronize_session=False)
                 updates = True
 
             if 'environment_id' in content:
