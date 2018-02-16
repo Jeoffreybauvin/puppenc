@@ -98,9 +98,11 @@ def post_item(Type):
 
             app.logger.info(u"Create Item %s %s by %s" % (Type, g.obj_name, g.user))
 
-            return jsonify({obj.id: {
+            return jsonify({
+                'id': obj.id,
                 'name': obj.name,
-            }})
+                'success': True,
+            })
         return func_wrapper
     return wrapper
 

@@ -127,12 +127,26 @@ class Hostgroups(PuppencResource):
             class_id = content['class_id']
 
         obj = Hostgroup(g.obj_name, class_id=class_id)
-        db.session.add(obj)
-        db.session.commit()
-        app.logger.info(u"Create Hostgroup %s %s by %s" % (Hostgroup, g.obj_name, g.user))
-        return jsonify({obj.id: {
-            'name': obj.name,
-        }})
+        try:
+            db.session.add(obj)
+            db.session.commit()
+            app.logger.info(u"Create Hostgroup %s %s by %s" % (Hostgroup, g.obj_name, g.user))
+            ret_code = 200
+            res = {
+                'id': obj.id,
+                'name': obj.name,
+                'class_id': class_id,
+                'success': True,
+            }
+        except:
+            ret_code = 500
+            res = {
+                'success': False,
+                'message': 'Something went wrong when adding this hostgroup. Please check the class_id',
+            }
+
+        return res, ret_code
+
 
     @auth.login_required
     @edit_item(Hostgroup)
