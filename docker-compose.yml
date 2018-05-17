@@ -2,7 +2,8 @@
 version: '2'
 services:
   puppenc-api:
-    image: puppenc/api:latest
+    #image: puppenc/api:latest
+    image: puppenc/api:v2
     restart: always
     ports:
       - "5000:5000"
