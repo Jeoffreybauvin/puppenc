@@ -13,7 +13,7 @@ before_install:
 - sudo apt-get update
 - sudo apt-get -y install docker-ce
 # Puppenc specific
-- docker pull puppenc/api:latest
+- docker pull puppenc/api:v2
 - docker pull mysql:5.6
 - cp tests/config.py.sample config.py
 - docker-compose -f tests/docker-compose.yml up -d
