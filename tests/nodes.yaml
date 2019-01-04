@@ -22,6 +22,12 @@
   - body: '{"name": "my_node"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_node"}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
   - group: "Nodes"
@@ -29,7 +35,15 @@
   - url: "/api/v1/nodes/1"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_node"}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
 
 - test:
   - group: "Nodes"
@@ -39,14 +53,25 @@
   - body: '{"name": "my_new_node"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Successfully modified"}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node"
+  - name: "Check my node after editing the name"
   - url: "/api/v1/nodes/1"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_node"}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
 
 - test:
   - group: "Nodes"
@@ -55,15 +80,24 @@
   - method: 'DELETE'
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Node is no longer active"}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node after delete"
+  - name: "Check my node after setting inactive"
   - url: "/api/v1/nodes/1"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 0}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_new_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 0}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
 
 - test:
   - group: "Nodes"
@@ -73,6 +107,7 @@
   - expected_status: [200]
   - validators:
       - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+      - compare: {jsonpath_mini: "message", comparator: "eq", expected: "<Node 'my_new_node'> deleted"}
 
 - test:
   - group: "Nodes"
@@ -87,31 +122,44 @@
   - name: "Recreate a node"
   - url: "/api/v1/nodes"
   - method: "POST"
-  - body: '{"name": "my_second_node"}'
+  - body: '{"name": "my_2nd_node"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node"
+  - name: "Check my node after recreation"
   - url: "/api/v1/nodes/2"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
-      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
-      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: null}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
+
 
 - test:
   - group: "Nodes"
-  - name: "Set an hostgroup for my node"
+  - name: "Set a hostgroup for my node"
   - url: "/api/v1/nodes/2"
   - method: "PUT"
-  - body: '{"hostgroup_id": 2}'
+  - body: '{"hostgroup_id": 4}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Successfully modified"}
 
 - test:
   - group: "Nodes"
@@ -119,10 +167,15 @@
   - url: "/api/v1/nodes/2"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
-      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
-      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 4}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
 
 - test:
   - group: "Nodes"
@@ -131,20 +184,26 @@
   - method: "PUT"
   - body: '{"hostgroup_id": 999}'
   - headers: {'Content-Type': 'application/json'}
-  - expected_status: [301]
+  - expected_status: [500]
   - validators:
       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+      - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Hostgroup not found"}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node after setting a hostgroup"
+  - name: "Check my node after setting an absent hostgroup"
   - url: "/api/v1/nodes/2"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
-      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: null}
-      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 4}
+
 
 - test:
   - group: "Nodes"
@@ -155,18 +214,24 @@
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Successfully modified"}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node after setting a environment"
+  - name: "Check my node after setting an environment"
   - url: "/api/v1/nodes/2"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
-      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
-      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 4}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}
 
 - test:
   - group: "Nodes"
@@ -175,17 +240,23 @@
   - method: "PUT"
   - body: '{"environment_id": 999}'
   - headers: {'Content-Type': 'application/json'}
-  - expected_status: [301]
+  - expected_status: [500]
   - validators:
       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+      - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Environment not found"}
 
 - test:
   - group: "Nodes"
-  - name: "Check my node after setting an environment"
+  - name: "Check my node after setting an absent environment"
   - url: "/api/v1/nodes/2"
   - expected_status: [200]
   - validators:
-      - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_second_node"}
-      - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
-      - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
-      - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "my_2nd_node"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "active", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "environment_id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "hostgroup_id", comparator: "eq", expected: 4}
+    - compare: {jsonpath_mini: "last_used", comparator: "type", expected: "null"}

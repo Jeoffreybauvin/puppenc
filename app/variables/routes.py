@@ -93,9 +93,13 @@ class Variables(PuppencResource):
         except:
             return { "success": False, "message": u"Something went wrong when trying to insert %s" % name  }, 500
         app.logger.info(u"Create Item %s %s by %s" % (Variable, name, g.user))
-        return jsonify({obj.id: {
-            'name': name,
-        }})
+
+        return jsonify({
+            'id': obj.id,
+            'name': obj.name,
+            'content': content,
+            'success': True,
+        })
 
     @auth.login_required
     @body_is_valid

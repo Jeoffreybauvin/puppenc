@@ -98,9 +98,11 @@ def post_item(Type):
 
             app.logger.info(u"Create Item %s %s by %s" % (Type, g.obj_name, g.user))
 
-            return jsonify({obj.id: {
+            return jsonify({
+                'id': obj.id,
                 'name': obj.name,
-            }})
+                'success': True,
+            })
         return func_wrapper
     return wrapper
 
@@ -113,7 +115,7 @@ def edit_item(Type):
             obj_id = kwargs.get('id')
             content = request.get_json(force=True, silent=True)
 
-            editable_properties = [ 'name', 'environment_id', 'class_id', 'hostgroup_id' ]
+            editable_properties = [ 'name', 'environment_id', 'class_id', 'hostgroup_id', 'content' ]
             updates = False
             for prop in editable_properties:
                 if prop in content:

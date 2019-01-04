@@ -66,9 +66,9 @@ def destroy_db():
     app.logger.info('Database deleted')
 
 @api.representation('text/plain')
-def output_yaml(data, code, headers=None):
+def output_yaml(data, headers=None):
     headers = {'Content-Type': 'text/plain'}
-    resp = make_response(yaml.dump(data, allow_unicode=True, default_flow_style=False, indent=5), code)
+    resp = make_response(yaml.dump(data, allow_unicode=True, default_flow_style=False, indent=5))
     resp.headers.extend(headers)
     return resp
 

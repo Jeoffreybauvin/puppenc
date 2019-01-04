@@ -2,7 +2,7 @@
 
 docker-compose -f tests/docker-compose.yml up -d
 
-sleep 10
+sleep 8
 
 # database creation
 docker-compose  -f tests/docker-compose.yml exec puppenc-api-tests python shell.py --setup

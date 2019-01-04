@@ -22,48 +22,76 @@
   - body: '{"name": "role::my_test_class"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_test_class"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
-   - group: "Classes"
-   - name: "Check my class"
-   - url: "/api/v1/classes/1"
-   - expected_status: [200]
-   - validators:
-       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_test_class"}
+  - group: "Classes"
+  - name: "Create the same class"
+  - url: "/api/v1/classes"
+  - method: "POST"
+  - body: '{"name": "role::my_test_class"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "message", comparator: "contains", expected: "already exists"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 
 - test:
-   - group: "Classes"
-   - name: "Edit a class"
-   - url: "/api/v1/classes/1"
-   - method: "PUT"
-   - body: '{"name": "role::my_new_test_class"}'
-   - headers: {'Content-Type': 'application/json'}
-   - expected_status: [200]
+  - group: "Classes"
+  - name: "Check my class"
+  - url: "/api/v1/classes/1"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_test_class"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
 
 - test:
-   - group: "Classes"
-   - name: "Check my class"
-   - url: "/api/v1/classes/1"
-   - expected_status: [200]
-   - validators:
-       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_new_test_class"}
+  - group: "Classes"
+  - name: "Edit a class"
+  - url: "/api/v1/classes/1"
+  - method: "PUT"
+  - body: '{"name": "role::my_new_test_class"}'
+  - headers: {'Content-Type': 'application/json'}
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "Successfully modified"}
 
 - test:
-   - group: "Classes"
-   - name: "Delete my class"
-   - url: "/api/v1/classes/1"
-   - method: 'DELETE'
-   - expected_status: [200]
-   - validators:
-       - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+  - group: "Classes"
+  - name: "Check my edited class"
+  - url: "/api/v1/classes/1"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 1}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_new_test_class"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "string"}
 
 - test:
-   - group: "Classes"
-   - name: "Check my class after delete"
-   - url: "/api/v1/classes/1"
-   - expected_status: [404]
-   - validators:
-       - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
+  - group: "Classes"
+  - name: "Delete my class"
+  - url: "/api/v1/classes/1"
+  - method: 'DELETE'
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
+    - compare: {jsonpath_mini: "message", comparator: "eq", expected: "<Class 'role::my_new_test_class'> deleted"}
+
+- test:
+  - group: "Classes"
+  - name: "Check my class after delete"
+  - url: "/api/v1/classes/1"
+  - expected_status: [404]
+  - validators:
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: false}
 
 - test:
   - group: "Classes"
@@ -73,11 +101,19 @@
   - body: '{"name": "role::my_second_test_class"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_second_test_class"}
+    - compare: {jsonpath_mini: "success", comparator: "eq", expected: true}
 
 - test:
-   - group: "Classes"
-   - name: "Check my class"
-   - url: "/api/v1/classes/2"
-   - expected_status: [200]
-   - validators:
-       - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_second_test_class"}
+  - group: "Classes"
+  - name: "Check my class"
+  - url: "/api/v1/classes/2"
+  - expected_status: [200]
+  - validators:
+    - compare: {jsonpath_mini: "id", comparator: "eq", expected: 2}
+    - compare: {jsonpath_mini: "name", comparator: "eq", expected: "role::my_second_test_class"}
+    - compare: {jsonpath_mini: "delete_date", comparator: "type", expected: "null"}
+    - compare: {jsonpath_mini: "insert_date", comparator: "type", expected: "string"}
+    - compare: {jsonpath_mini: "update_date", comparator: "type", expected: "null"}
