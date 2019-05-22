@@ -2,8 +2,7 @@
 version: '2'
 services:
   puppenc-api:
-    #image: puppenc/api:latest
-    image: puppenc/api:v2
+    image: puppenc/api:latest
     restart: always
     ports:
       - "5000:5000"
@@ -16,7 +15,7 @@ services:
       - python
       - run.py
     environment:
-      PUPPENC_SETTINGS: 'config.py'      
+      PUPPENC_SETTINGS: 'config.py'
   puppenc-mysql:
     image: mysql:5.6
     ports:
