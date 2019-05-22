@@ -79,11 +79,20 @@ class Variables(PuppencResource):
         """
         data = request.get_json(silent=True)
         if not 'content' in data:
-            content = None
+            return { "success": False, "message": u"content parameter is mandatory, check the documentation" }, 400
         else:
-            content = data['content']
+            if not data['content']:
+                return { "success": False, "message": u"content parameter cannot be empty, check the documentation" }, 400
+            else:
+                content = data['content']
 
-        name = data['name']
+        if not 'name' in data:
+            return { "success": False, "message": u"name parameter is mandatory, check the documentation" }, 400
+        else:
+            if not data['name']:
+                return { "success": False, "message": u"name parameter cannot be empty, check the documentation" }, 400
+            else:
+                name = data['name']
 
         obj = Variable(name, content=content)
 

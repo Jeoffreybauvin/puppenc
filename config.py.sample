@@ -6,3 +6,6 @@ PROFILE = True
 SECRET_KEY = "my_secret_key"
 # Token validity duration
 AUTH_DURATION = 600
+
+# Enable of not auth
+ENABLE_AUTH = True

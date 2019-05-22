@@ -71,7 +71,7 @@
   - name: "Recreate a variable"
   - url: "/api/v1/variables"
   - method: "POST"
-  - body: '{"name": "my_second_variable"}'
+  - body: '{"name": "my_second_variable", "content": "prout"}'
   - headers: {'Content-Type': 'application/json'}
   - expected_status: [200]
 
