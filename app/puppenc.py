@@ -1,6 +1,6 @@
 import os, sys, yaml, logging
 from logging.handlers import RotatingFileHandler
-from flask import Flask, Blueprint, make_response, request, abort, g
+from flask import Flask, Blueprint, make_response, request, abort, g, send_from_directory, redirect
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -88,6 +88,7 @@ class PuppencResource(Resource):
     # Useful interceptor to log all endpoint responses
     @app.after_request
     def after_request(response):
+        response.direct_passthrough = False
         resp_time = PuppencResource.stop_timer(response)
 
         timestamp = time.strftime('%Y-%b-%d %H:%M')
@@ -149,6 +150,19 @@ api.add_resource(Variables, '/variables', '/variables/<int:id>')
 api.add_resource(Enc, '/enc/<string:node_name>')
 api.add_resource(Users, '/users', '/users/<int:id>')
 api.add_resource(Tokens, '/tokens')
+
+@app.after_request
+def after_request(r):
+    return r
+
+@app.route('/doc/')
+@app.route('/doc')
+def my_redirect():
+    return redirect("/doc/index.html")
+
+@app.route("/doc/<path:path>")
+def static_dir(path):
+    return send_from_directory('docs', path)
 
 class Index(PuppencResource):
     def get(self):
